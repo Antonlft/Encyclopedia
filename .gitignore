@@ -1,0 +1,38 @@
+# --- OS junk ---
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# --- Python cache ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# --- Editors and tools ---
+.vscode/
+.idea/
+*.swp
+*~
+.claude/
+
+# --- Safety net: keep personal documents out of this public repo ---
+*.pdf
+*.doc
+*.docx
+*.xls
+*.xlsx
+*.xlsm
+*.csv
+*.ppt
+*.pptx
+*.key
+*.numbers
+*.pages
+*.txt
+~$*
