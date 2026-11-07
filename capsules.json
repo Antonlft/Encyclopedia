@@ -1,1 +1,55 @@
-[]
+[
+  {
+    "title": "Capsule 1 · Money & Banking (Central Banking 101)",
+    "slug": "money-and-banking-central-banking-101",
+    "file": "capsules/money-and-banking-central-banking-101.html",
+    "topic": "Money & banking",
+    "tags": [
+      "central banking",
+      "Fed",
+      "QE",
+      "bank runs",
+      "shadow banking",
+      "eurodollars",
+      "Central Banking 101"
+    ],
+    "summary": "Who really creates money: the four types of money, banks vs. the Fed, shadow banks and the offshore dollar (Central Banking 101, ch. 1–4).",
+    "date_built": "2026-11-07",
+    "facts_verified_as_of": "2026-11-07",
+    "status": "done"
+  },
+  {
+    "title": "Subsidies, in one electric car",
+    "slug": "subsidies-in-one-electric-car",
+    "file": "capsules/subsidies-in-one-electric-car.html",
+    "topic": "Trade & industrial policy",
+    "tags": [
+      "subsidies",
+      "EV tax credit",
+      "industrial policy",
+      "CHIPS Act",
+      "deadweight loss"
+    ],
+    "summary": "How subsidies work, told through the US $7,500 EV credit and what happened when it was switched off.",
+    "date_built": "2026-10-13",
+    "facts_verified_as_of": "2026-10-13",
+    "status": "done"
+  },
+  {
+    "title": "Tariffs, in one washing machine",
+    "slug": "tariffs-in-one-washing-machine",
+    "file": "capsules/tariffs-in-one-washing-machine.html",
+    "topic": "Trade & industrial policy",
+    "tags": [
+      "tariffs",
+      "trade war",
+      "comparative advantage",
+      "deadweight loss",
+      "retaliation"
+    ],
+    "summary": "Who really pays a tariff, told through the 2018 US washing-machine tariff, with a simulator.",
+    "date_built": "2026-10-13",
+    "facts_verified_as_of": "2026-10-13",
+    "status": "done"
+  }
+]

@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Subsidies, in one electric car</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF1F4; --surface:#FFFFFF; --ink:#13202E; --muted:#556474; --line:#D3DAE2;
+  --gain:#1E8657; --gain-soft:rgba(30,134,87,.20);
+  --loss:#C2362B; --loss-soft:rgba(194,54,43,.12);
+  --waste:#8C96A1; --waste-soft:rgba(140,150,161,.40);
+  --accent:#E2701B;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1720; --surface:#17212C; --ink:#E8EDF2; --muted:#9AA7B4; --line:#2B3846;
+    --gain:#3DBE82; --gain-soft:rgba(61,190,130,.24);
+    --loss:#EF6A5E; --loss-soft:rgba(239,106,94,.14);
+    --waste:#7C8692; --waste-soft:rgba(124,134,146,.45);
+    --accent:#F08A3C; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1720; --surface:#17212C; --ink:#E8EDF2; --muted:#9AA7B4; --line:#2B3846;
+  --gain:#3DBE82; --gain-soft:rgba(61,190,130,.24);
+  --loss:#EF6A5E; --loss-soft:rgba(239,106,94,.14);
+  --waste:#7C8692; --waste-soft:rgba(124,134,146,.45);
+  --accent:#F08A3C; color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Archivo",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-variation-settings:"wdth" 100;font-size:17px;line-height:1.5}
+main{max-width:760px;margin:0 auto;padding:28px 20px 64px}
+h1,h2,h3{font-variation-settings:"wdth" 125;line-height:1.05;margin:0}
+h1{font-size:clamp(2.3rem,7vw,3.6rem);font-weight:900;letter-spacing:-.01em}
+h2{font-size:clamp(1.5rem,4.2vw,2rem);font-weight:850;margin-bottom:6px}
+p{margin:0}
+.lede{color:var(--muted);margin-bottom:18px;max-width:62ch}
+section{padding:44px 0 8px;border-top:2px solid var(--ink)}
+section:first-of-type{border-top:0;padding-top:8px}
+a{color:inherit;text-decoration-thickness:1px;text-underline-offset:3px}
+.small{font-size:.82rem;color:var(--muted)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:4px}
+.gain{color:var(--gain)} .loss{color:var(--loss)} .waste{color:var(--waste)}
+
+/* HERO */
+.hero{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end;margin-bottom:22px}
+.tag{position:relative;background:var(--accent);color:#1b1006;padding:18px 22px 16px 40px;clip-path:polygon(22px 0,100% 0,100% 100%,22px 100%,0 50%);transform:rotate(-4deg);min-width:200px}
+.tag::before{content:"";position:absolute;left:12px;top:50%;width:10px;height:10px;margin-top:-5px;border-radius:50%;background:var(--bg)}
+.tag .big{font-variation-settings:"wdth" 125;font-weight:900;font-size:3rem;line-height:1}
+.tag .sm{font-size:.82rem;font-weight:600;line-height:1.3;max-width:21ch}
+.hook{font-size:1.2rem;font-weight:500;max-width:56ch;margin-bottom:22px}
+.flip{display:grid;grid-template-columns:1fr auto 1fr;gap:0;border:1px solid var(--line);background:var(--surface)}
+.flip > div{padding:14px 16px}
+.flip .mid{display:flex;align-items:center;font-size:1.6rem;color:var(--muted);padding:0 4px}
+.flip h3{font-size:1.05rem;font-weight:850;margin-bottom:4px}
+.flip p{font-size:.92rem;line-height:1.35}
+.flip .arrow{font-weight:800}
+.bridge{margin-top:14px;background:var(--ink);color:var(--bg);padding:16px 18px}
+.bridge b{color:var(--accent)}
+.bridge .row{display:flex;gap:18px;flex-wrap:wrap;margin-top:10px}
+.bridge .row div{flex:1 1 180px}
+.bridge strong{display:block;font-variation-settings:"wdth" 115;font-size:1.5rem;font-weight:850}
+.bridge span{font-size:.86rem;opacity:.85;line-height:1.35;display:block}
+
+/* CASE */
+.timeline{list-style:none;margin:16px 0 0;padding:0;border-left:3px solid var(--ink)}
+.timeline li{position:relative;padding:0 0 16px 20px}
+.timeline li::before{content:"";position:absolute;left:-8px;top:6px;width:13px;height:13px;background:var(--bg);border:3px solid var(--ink);border-radius:50%}
+.timeline li.cliff::before{background:var(--loss);border-color:var(--loss)}
+.timeline .when{font-weight:800;font-variation-settings:"wdth" 115}
+.receipt{margin-top:8px;background:var(--surface);border:1px solid var(--line);padding:16px 18px;display:grid;grid-template-columns:1fr auto;gap:8px 18px;font-variant-numeric:tabular-nums}
+.receipt .r{text-align:right;font-weight:800}
+.receipt .hd{grid-column:1/-1;font-weight:850;font-variation-settings:"wdth" 115;border-bottom:2px dashed var(--line);padding-bottom:6px}
+.concept{margin-top:18px;padding:16px 18px;background:var(--ink);color:var(--bg)}
+.concept b{color:var(--accent)}
+
+/* SIMULATOR */
+.sim{background:var(--surface);border:2px solid var(--ink);padding:18px}
+.question{font-variation-settings:"wdth" 120;font-weight:850;font-size:1.25rem;margin-bottom:12px}
+.controls{display:grid;gap:12px;margin-bottom:10px}
+.slider-row{display:flex;align-items:center;gap:14px}
+.slider-row label{font-weight:700;white-space:nowrap}
+.rate{font-variation-settings:"wdth" 125;font-weight:900;font-size:1.9rem;min-width:4.2ch;text-align:right;color:var(--accent)}
+input[type=range]{flex:1;accent-color:var(--accent);height:28px}
+.ticks{display:flex;justify-content:space-between;font-size:.75rem;color:var(--muted);margin-top:-8px}
+.pills{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.pills .lab{font-weight:700;font-size:.9rem;min-width:13ch}
+.pill{border:1.5px solid var(--line);background:transparent;padding:6px 12px;border-radius:999px;font-size:.86rem;cursor:pointer}
+.pill[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.read{font-size:.88rem;background:var(--bg);padding:8px 12px;margin:6px 0 4px}
+.chart-wrap{overflow-x:auto}
+svg.chart{width:100%;min-width:500px;height:auto;display:block}
+svg.chart text{font-family:"Archivo",system-ui,sans-serif;fill:var(--ink)}
+svg.chart .halo{paint-order:stroke;stroke:var(--surface);stroke-width:4px;stroke-linejoin:round}
+.capture{margin-top:10px}
+.capture .bar{display:flex;height:34px;border:1.5px solid var(--ink);overflow:hidden;font-weight:800;font-size:.86rem}
+.capture .bar div{display:flex;align-items:center;padding:0 10px;white-space:nowrap;transition:flex-basis .25s}
+.capture .b{background:var(--gain);color:#fff}
+.capture .s{background:var(--gain-soft);color:var(--ink);justify-content:flex-end}
+.readout{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:10px}
+.cell{padding:10px 12px;border:1px solid var(--line);border-top-width:4px}
+.cell .k{font-size:.82rem;color:var(--muted);line-height:1.25}
+.cell .v{font-variation-settings:"wdth" 115;font-weight:850;font-size:1.4rem;font-variant-numeric:tabular-nums}
+.cell.price{border-top-color:var(--accent)}
+.cell.c-loss{border-top-color:var(--loss)} .cell.c-loss .v{color:var(--loss)}
+.cell.c-gain{border-top-color:var(--gain)} .cell.c-gain .v{color:var(--gain)}
+.cell.c-waste{border-top-color:var(--waste)} .cell.c-waste .v{color:var(--waste)}
+.cell.wide{grid-column:1/-1}
+.note{margin-top:10px;font-size:.82rem;color:var(--muted)}
+
+/* FLOW */
+.chain{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.step{flex:1 1 105px;text-align:left;border:2px solid var(--ink);background:var(--surface);padding:10px;cursor:pointer;min-height:78px}
+.step .n{font-variation-settings:"wdth" 125;font-weight:900;font-size:1.3rem;line-height:1}
+.step .t{font-weight:700;font-size:.86rem;line-height:1.2;display:block;margin-top:4px}
+.step[aria-expanded="true"]{background:var(--ink);color:var(--bg)}
+.panel{margin-top:10px;border-left:4px solid var(--accent);background:var(--surface);padding:14px 16px;min-height:96px}
+.panel .line{font-weight:600;margin-bottom:8px}
+.panel .ex{font-size:.94rem}
+.panel .ex b{color:var(--accent)}
+
+/* POLICY CARDS */
+.policy{display:grid;gap:10px;margin-top:14px}
+.pcard{text-align:left;background:var(--surface);border:2px solid var(--ink);padding:14px 16px;cursor:pointer}
+.pcard .top{display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap}
+.pcard .name{font-variation-settings:"wdth" 120;font-weight:850;font-size:1.15rem}
+.pcard .amt{font-weight:800;color:var(--accent)}
+.whys{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.why{font-size:.78rem;font-weight:700;border:1.5px solid var(--line);padding:2px 8px;border-radius:999px}
+.pcard .more{display:none;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);font-size:.93rem}
+.pcard .more p+p{margin-top:6px}
+.pcard[aria-expanded="true"] .more{display:block}
+.pcard .hint{font-size:.8rem;color:var(--muted);margin-top:6px}
+.pcard[aria-expanded="true"] .hint{display:none}
+
+/* WINNERS / LOSERS */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin-top:14px}
+.card{text-align:left;background:var(--surface);border:1px solid var(--line);padding:14px;cursor:pointer;display:flex;flex-direction:column;gap:8px;min-height:116px}
+.card .head{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.card .who{font-weight:800;font-variation-settings:"wdth" 110}
+.stamp{font-variation-settings:"wdth" 125;font-weight:900;font-size:.8rem;padding:3px 8px;border:2px solid currentColor;transform:rotate(-6deg)}
+.stamp.w{color:var(--gain)} .stamp.l{color:var(--loss)} .stamp.m{color:var(--waste)}
+.card .hint{font-size:.82rem;color:var(--muted)}
+.card .back{display:none;font-size:.92rem}
+.card[aria-expanded="true"] .back{display:block}
+.card[aria-expanded="true"] .hint{display:none}
+.card.w[aria-expanded="true"]{box-shadow:inset 4px 0 0 var(--gain)}
+.card.l[aria-expanded="true"]{box-shadow:inset 4px 0 0 var(--loss)}
+.card.m[aria-expanded="true"]{box-shadow:inset 4px 0 0 var(--waste)}
+
+/* REMEMBER */
+.keep{display:grid;gap:12px;margin-top:14px}
+.keep div{background:var(--ink);color:var(--bg);padding:16px 18px}
+.keep strong{display:block;font-variation-settings:"wdth" 120;font-size:1.15rem;font-weight:850;color:var(--accent);margin-bottom:2px}
+
+/* TRAPS */
+.traps{display:grid;gap:10px;margin-top:14px}
+.trap{text-align:left;background:var(--surface);border:1px solid var(--line);padding:14px 16px;cursor:pointer}
+.trap .myth{font-weight:700;display:flex;gap:10px;align-items:baseline}
+.trap .myth::before{content:"✕";color:var(--loss);font-weight:900}
+.trap .fact{display:none;margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);font-size:.94rem}
+.trap .fact::before{content:"✓ ";color:var(--gain);font-weight:900}
+.trap[aria-expanded="true"] .fact{display:block}
+.trap[aria-expanded="true"] .myth{text-decoration:line-through;text-decoration-color:var(--loss);color:var(--muted)}
+.trap .tap{font-size:.78rem;color:var(--muted);margin-left:auto;white-space:nowrap}
+.trap[aria-expanded="true"] .tap{display:none}
+
+/* QUIZ */
+.q{background:var(--surface);border:1px solid var(--line);padding:16px;margin-top:12px}
+.q .qt{font-weight:700;margin-bottom:10px}
+.opts{display:grid;gap:8px}
+.opt{text-align:left;border:1.5px solid var(--line);background:transparent;padding:10px 12px;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--ink)}
+.opt:disabled{cursor:default}
+.opt.right{border-color:var(--gain);background:var(--gain-soft);font-weight:700}
+.opt.wrong{border-color:var(--loss);background:var(--loss-soft)}
+.fb{display:none;margin-top:10px;font-size:.94rem}
+.fb.show{display:block}
+.score{margin-top:14px;font-weight:800;font-variation-settings:"wdth" 115;font-size:1.15rem}
+
+/* DEAL LENS */
+.deal{margin-top:14px;border:2px solid var(--accent);padding:16px 18px;background:var(--surface);display:grid;gap:8px}
+.deal p{padding-left:16px;position:relative}
+.deal p::before{content:"";position:absolute;left:0;top:.55em;width:7px;height:7px;background:var(--accent)}
+
+.sources{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);font-size:.8rem;color:var(--muted)}
+.sources ul{padding-left:18px;margin:6px 0 0}
+.sources li{margin-bottom:3px}
+
+@media (max-width:600px){
+  body{font-size:16px}
+  .hero{grid-template-columns:1fr}
+  .tag{justify-self:start;transform:rotate(-3deg)}
+  .flip{grid-template-columns:1fr}
+  .flip .mid{justify-content:center;padding:0;transform:rotate(90deg)}
+  .chain{flex-direction:column}
+  .step{min-height:0;display:flex;gap:10px;align-items:center}
+  .step .t{margin-top:0}
+}
+@media (prefers-reduced-motion:no-preference){
+  .tag{animation:drop .7s cubic-bezier(.2,.9,.3,1.3) both}
+  @keyframes drop{from{opacity:0;transform:translateY(-24px) rotate(-14deg)}to{opacity:1;transform:rotate(-4deg)}}
+}
+@media (prefers-reduced-motion:reduce){.capture .bar div{transition:none}}
+</style>
+</head>
+<body>
+<main>
+
+<!-- 1. HOOK + BRIDGE -->
+<section id="hook">
+  <div class="hero">
+    <h1>Subsidies, in one electric car</h1>
+    <div class="tag" aria-label="Minus 7,500 dollars on a US electric car">
+      <div class="big">−$7,500</div>
+      <div class="sm">off a new US EV, until 30 Sept 2025</div>
+    </div>
+  </div>
+  <p class="hook">A subsidy is government money that makes something cheaper to make or buy. Switch one off and you see exactly what it was holding up.</p>
+
+  <div class="flip" aria-label="Tariff versus subsidy">
+    <div>
+      <h3><a href="https://claude.ai/artifact/QePfoxwGm8GeRLSnUe1HKR" target="_blank" rel="noopener">Capsule 1: tariff</a></h3>
+      <p>Tax on imports. <span class="arrow loss">Price ↑</span> for buyers. Your own shoppers pay.</p>
+    </div>
+    <div class="mid" aria-hidden="true">⇄</div>
+    <div>
+      <h3>Capsule 2: subsidy</h3>
+      <p>Payment to producers or buyers. <span class="arrow gain">Price ↓</span> for buyers. Your own taxpayers pay.</p>
+    </div>
+  </div>
+
+  <div class="bridge">
+    <p><b>The bridge:</b> the 2018 trade war's cleanup bill was a subsidy. China's tariffs crushed US farm exports, so Washington paid farmers.</p>
+    <div class="row">
+      <div><strong>$23bn</strong><span>paid to US farms, 2018–19 (Market Facilitation Program, GAO)</span></div>
+      <div><strong>+$3bn</strong><span>paid to corn growers above their estimated trade damage, 2019 (GAO)</span></div>
+    </div>
+  </div>
+  <p class="small" style="margin-top:6px">Capsule 1 cited "up to $28bn". That was the amount announced; $23bn is what was actually paid.</p>
+</section>
+
+<!-- 2. CASE -->
+<section id="case">
+  <h2>The story: the $7,500 EV credit</h2>
+  <p class="lede">Born in 2008, supercharged in 2022, killed in 2025. A clean natural experiment.</p>
+  <ol class="timeline">
+    <li><span class="when">2022</span><br>The Inflation Reduction Act revamps the credit: up to $7,500, but only for cars and batteries made in North America or allied countries, under price and income caps.</li>
+    <li><span class="when">2023–25</span><br>Loophole: leased EVs dodge the rules through a separate business credit. The leasing company, often the carmaker's own finance arm, claims it and decides how much to pass on.</li>
+    <li><span class="when">July 2025</span><br>Congress's One Big Beautiful Bill Act kills the credit. Deadline: 30 Sept 2025.</li>
+    <li><span class="when">Q3 2025</span><br>Rush. Record EV sales, a <b class="gain">10.5%</b> market share. GM's EV sales more than double.</li>
+    <li class="cliff"><span class="when">Oct 2025 onward</span><br>Cliff. EV share drops from over 11% in September to <b class="loss">5.8%</b> in October. Hyundai replaces the credit with its own $7,500 discount; Honda scraps its 0 Series EVs (March 2026).</li>
+  </ol>
+  <div class="receipt" aria-label="EV credit receipt">
+    <span class="hd">The receipt</span>
+    <span>EVs bought in 2025 with some federal support (incl. leases)</span><span class="r">90%+</span>
+    <span>Share of EV subsidies reaching buyers as lower prices (13 countries, 2013–20)</span><span class="r gain">70–80%</span>
+    <span>Credit recipients who would have bought an EV anyway (CBO, 2023)</span><span class="r loss">~68%</span>
+    <span>US EV sales, first half 2026 vs. first half 2025</span><span class="r loss">−24%</span>
+  </div>
+  <p class="small" style="margin-top:6px">Estimates: 90%+ is Benchmark Minerals'; "would have bought anyway" ranges 67–77% across studies. The 2026 drop also reflects looser emissions rules, not just the credit.</p>
+  <div class="concept"><b>The concept:</b> a subsidy drives a wedge between what buyers pay and what sellers get. Both sides share the money, and a big chunk pays people for things they'd have done anyway.</div>
+</section>
+
+<!-- 3. SIMULATOR -->
+<section id="sim">
+  <h2>Run your own subsidy</h2>
+  <p class="lede">A simplified US EV market. Drag the subsidy, then change how flexible each side is.</p>
+  <div class="sim">
+    <p class="question">Who captures the subsidy, buyers or sellers?</p>
+    <div class="controls">
+      <div>
+        <div class="slider-row">
+          <label for="sub">Subsidy per car</label>
+          <input id="sub" type="range" min="0" max="12" step="0.5" value="7.5">
+          <output id="subOut" class="rate" for="sub">$7.5k</output>
+        </div>
+        <div class="ticks" aria-hidden="true"><span>$0</span><span>$7,500 (US credit)</span><span>$12k</span></div>
+      </div>
+      <div class="pills" role="group" aria-label="Buyers' reaction to price">
+        <span class="lab">Buyers react to price</span>
+        <button class="pill" data-g="d" data-v="steep" aria-pressed="true">Weakly (steep demand)</button>
+        <button class="pill" data-g="d" data-v="flat" aria-pressed="false">Strongly (flat demand)</button>
+      </div>
+      <div class="pills" role="group" aria-label="Automakers' ability to add output">
+        <span class="lab">Automakers add output</span>
+        <button class="pill" data-g="s" data-v="flat" aria-pressed="true">Easily (flat supply)</button>
+        <button class="pill" data-g="s" data-v="steep" aria-pressed="false">Barely (steep supply)</button>
+      </div>
+    </div>
+    <p class="read"><b>How to read it:</b> up a line = higher price. Demand: higher price, fewer buyers. Supply: higher price, more cars built. The less flexible (steeper) side captures more of the subsidy. The <b style="color:var(--accent)">orange bar</b> is the subsidy: the gap between what sellers get and buyers pay.</p>
+
+    <div class="chart-wrap">
+    <svg class="chart" id="chart" viewBox="0 0 580 372" role="img" aria-labelledby="chartTitle">
+      <title id="chartTitle">Supply and demand diagram of the US EV market showing how a per-car subsidy splits between buyers and sellers</title>
+      <defs>
+        <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+          <rect width="6" height="6" fill="var(--gain-soft)"/><line x1="0" y1="0" x2="0" y2="6" stroke="var(--gain)" stroke-width="1.6"/>
+        </pattern>
+      </defs>
+      <line x1="56" y1="330" x2="440" y2="330" stroke="var(--ink)" stroke-width="1.5"/>
+      <line x1="56" y1="330" x2="56" y2="16" stroke="var(--ink)" stroke-width="1.5"/>
+      <g id="ticks" font-size="11"></g>
+      <text x="248" y="366" font-size="12" text-anchor="middle" style="fill:var(--muted)">EVs sold per year (millions)</text>
+      <text x="14" y="174" font-size="12" text-anchor="middle" transform="rotate(-90 14 174)" style="fill:var(--muted)">Price per car</text>
+      <!-- areas -->
+      <polygon id="aCS" fill="var(--gain-soft)"/>
+      <polygon id="aPS" fill="url(#hatch)"/>
+      <polygon id="aDWL" fill="var(--waste-soft)"/>
+      <rect id="aCost" fill="none" stroke="var(--loss)" stroke-width="2.5" stroke-dasharray="6 4"/>
+      <!-- reference & price lines -->
+      <line id="p0" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="4 4"/>
+      <line id="pb" stroke="var(--gain)" stroke-width="1.5"/>
+      <line id="ps" stroke="var(--gain)" stroke-width="1.5" stroke-dasharray="2 3"/>
+      <!-- curves -->
+      <line id="dem" stroke="var(--ink)" stroke-width="2.6"/>
+      <line id="sup" stroke="var(--ink)" stroke-width="2.6"/>
+      <text id="dLab" font-size="13" font-weight="800" class="halo">US demand</text>
+      <text id="dLab2" font-size="11" class="halo" style="fill:var(--muted)">(EV buyers)</text>
+      <text id="sLab" font-size="13" font-weight="800" class="halo">Supply</text>
+      <text id="sLab2" font-size="11" class="halo" style="fill:var(--muted)">(automakers)</text>
+      <!-- wedge + markers -->
+      <line id="wedge" stroke="var(--accent)" stroke-width="3"/>
+      <circle id="dot0" r="6" fill="var(--surface)" stroke="var(--ink)" stroke-width="2.5"/>
+      <circle id="dotS" r="6" fill="var(--accent)" stroke="var(--ink)" stroke-width="2"/>
+      <circle id="dotB" r="6" fill="var(--accent)" stroke="var(--ink)" stroke-width="2"/>
+      <text id="l0" font-size="11" font-weight="800" text-anchor="end" class="halo"></text>
+      <text id="lS" font-size="11" font-weight="800" class="halo"></text>
+      <text id="lB" font-size="11" font-weight="800" class="halo"></text>
+      <text id="lW" font-size="11" font-weight="800" class="halo" style="fill:var(--accent)"></text>
+    </svg>
+    </div>
+
+    <div class="capture" aria-live="polite">
+      <div class="bar"><div class="b" id="barB">Buyers 75%</div><div class="s" id="barS">Sellers 25%</div></div>
+    </div>
+
+    <div class="readout" aria-live="polite">
+      <div class="cell price"><div class="k">Buyers pay</div><div class="v" id="oPb"></div></div>
+      <div class="cell price"><div class="k">Sellers receive</div><div class="v" id="oPs"></div></div>
+      <div class="cell c-loss"><div class="k">Taxpayer cost<br><span class="small">red dashed box</span></div><div class="v" id="oCost"></div></div>
+      <div class="cell price"><div class="k">Extra EVs sold</div><div class="v" id="oDQ"></div></div>
+      <div class="cell c-gain"><div class="k">Buyers gain<br><span class="small">solid green</span></div><div class="v" id="oCS"></div></div>
+      <div class="cell c-gain"><div class="k">Sellers gain<br><span class="small">hatched green</span></div><div class="v" id="oPS"></div></div>
+      <div class="cell c-waste wide"><div class="k"><b>Deadweight loss</b> (= money lost on extra cars that cost more to build than buyers value them at)<br><span class="small">grey triangle</span></div><div class="v" id="oDWL"></div></div>
+      <div class="cell c-loss wide"><div class="k">Spent on cars that would have sold anyway</div><div class="v" id="oInf"></div></div>
+    </div>
+    <p class="note">Stylized model: round numbers near the US market (1.3M EVs a year at $50k before any credit). The default setting is calibrated so buyers capture ~75%, matching global studies (70–80%). Real life differed: income, price and sourcing caps limited who qualified, leases bypassed them, and looser emissions rules hit EVs at the same time.</p>
+  </div>
+</section>
+
+<!-- 4. FLOW -->
+<section id="flow">
+  <h2>What happens next</h2>
+  <p class="lede">A subsidy sets off a chain. Tap each step.</p>
+  <div class="chain" role="group" aria-label="Subsidy chain reaction">
+    <button class="step" data-i="0" aria-expanded="true" aria-controls="flowPanel"><span class="n">1</span><span class="t">Government pays</span></button>
+    <button class="step" data-i="1" aria-expanded="false" aria-controls="flowPanel"><span class="n">2</span><span class="t">Producers expand or cut prices</span></button>
+    <button class="step" data-i="2" aria-expanded="false" aria-controls="flowPanel"><span class="n">3</span><span class="t">Buyers pay less</span></button>
+    <button class="step" data-i="3" aria-expanded="false" aria-controls="flowPanel"><span class="n">4</span><span class="t">Rivals complain</span></button>
+    <button class="step" data-i="4" aria-expanded="false" aria-controls="flowPanel"><span class="n">5</span><span class="t">Retaliation or WTO case</span></button>
+    <button class="step" data-i="5" aria-expanded="false" aria-controls="flowPanel"><span class="n">6</span><span class="t">Taxpayers foot the bill</span></button>
+  </div>
+  <div class="panel" id="flowPanel" aria-live="polite"></div>
+</section>
+
+<!-- 5. INDUSTRIAL POLICY -->
+<section id="policy">
+  <h2>Industrial policy: three big bets</h2>
+  <p class="lede"><b>Industrial policy</b> = a government picking sectors to grow on purpose. Tap each case.</p>
+  <div class="policy">
+    <button class="pcard" aria-expanded="false">
+      <span class="top"><span class="name">CHIPS Act (US, 2022)</span><span class="amt">$52.7bn</span></span>
+      <span class="whys"><span class="why">National security</span><span class="why">Strategic dependence</span><span class="why">Jobs</span></span>
+      <span class="hint">Tap for the outcome</span>
+      <span class="more"><p><b>How:</b> $39bn of it goes to factories. TSMC got $6.6bn toward its Arizona fabs; its pledge there grew from $65bn to $165bn (Commerce, Jan 2026).</p><p><b>Twist:</b> in Aug 2025 Intel's grant became a 9.9% government stake ($8.9bn). Taxpayer as shareholder.</p><p class="small">Pledged investment is not built capacity. Watch the fabs, not the press releases.</p></span>
+    </button>
+    <button class="pcard" aria-expanded="false">
+      <span class="top"><span class="name">Airbus vs. Boeing (2004–today)</span><span class="amt">$11.5bn in tariffs</span></span>
+      <span class="whys"><span class="why">Catch-up</span><span class="why">Jobs</span><span class="why">Prestige industry</span></span>
+      <span class="hint">Tap for the outcome</span>
+      <span class="more"><p><b>How:</b> both sides sued at the WTO in 2004. Verdict: both got illegal support. 2019: the US was allowed tariffs on $7.5bn of EU goods a year, the largest award in WTO history; the EU got $4bn.</p><p><b>Now:</b> a 2021 five-year truce, effectively extended in 2026. In July 2026 Boeing complained about a €3bn EU loan to Airbus.</p></span>
+    </button>
+    <button class="pcard" aria-expanded="false">
+      <span class="top"><span class="name">EU farm subsidies (CAP)</span><span class="amt">€386.6bn, 2021–27</span></span>
+      <span class="whys"><span class="why">Food security</span><span class="why">Rural jobs</span><span class="why">Politics</span></span>
+      <span class="hint">Tap for the outcome</span>
+      <span class="more"><p><b>How:</b> about a third of the EU budget; €291bn is income support for farmers.</p><p><b>Now:</b> 2024 farmer protests forced looser rules. The July 2025 proposal folds CAP into a single fund with ~€300bn ringfenced. MEPs and farm groups call it a cut and are pushing back.</p></span>
+    </button>
+  </div>
+</section>
+
+<!-- 6. WINNERS / LOSERS -->
+<section id="who">
+  <h2>Winners vs. losers</h2>
+  <p class="lede">Tap a card to see the receipt.</p>
+  <div class="cards">
+    <button class="card w" aria-expanded="false"><span class="head"><span class="who">Buyers</span><span class="stamp w">WIN</span></span><span class="hint">Tap to reveal</span><span class="back">Pay less. Globally, 70–80% of EV subsidies showed up as lower prices.</span></button>
+    <button class="card w" aria-expanded="false"><span class="head"><span class="who">Subsidized producers</span><span class="stamp w">WIN</span></span><span class="hint">Tap to reveal</span><span class="back">More sales, fatter checks. GM's EV sales more than doubled in Q3 2025; TSMC got $6.6bn for Arizona.</span></button>
+    <button class="card l" aria-expanded="false"><span class="head"><span class="who">Unsubsidized rivals</span><span class="stamp l">LOSE</span></span><span class="hint">Tap to reveal</span><span class="back">Only 21 models qualified for the buyer credit in 2025. Everyone else sold at a $7,500 handicap, unless leased.</span></button>
+    <button class="card l" aria-expanded="false"><span class="head"><span class="who">Taxpayers</span><span class="stamp l">LOSE</span></span><span class="hint">Tap to reveal</span><span class="back">Fund it all, including ~68% of EV credits paid to people who'd have bought anyway (CBO).</span></button>
+    <button class="card m" aria-expanded="false"><span class="head"><span class="who">Foreign competitors</span><span class="stamp m">MIXED</span></span><span class="hint">Tap to reveal</span><span class="back">Shut out, unless they move in. The IRA excluded China-linked batteries; Taiwan's TSMC grabbed CHIPS money by building in Arizona.</span></button>
+  </div>
+</section>
+
+<!-- 7. REMEMBER -->
+<section id="remember">
+  <h2>Remember these 3</h2>
+  <div class="keep">
+    <div><strong>A subsidy is a tariff in reverse.</strong>The price falls instead of rises, and taxpayers pay instead of shoppers. Same diagram, flipped.</div>
+    <div><strong>The less flexible side captures it.</strong>Not whoever gets the check. EVs: buyers got ~70–80%, because carmakers could add supply.</div>
+    <div><strong>Switch it off and the cliff shows the truth.</strong>US EV share: over 11% in Sept 2025, 5.8% a month later.</div>
+  </div>
+</section>
+
+<!-- 8. TRAPS -->
+<section id="traps">
+  <h2>Common traps</h2>
+  <p class="lede">Tap each myth to flip it.</p>
+  <div class="traps">
+    <button class="trap" aria-expanded="false"><span class="myth">"The subsidy goes to whoever gets the check." <span class="tap">Tap</span></span><span class="fact">Sellers can raise prices and pocket part of it. The split depends on flexibility, not paperwork. With EV leases, the carmaker's finance arm got the check.</span></button>
+    <button class="trap" aria-expanded="false"><span class="myth">"Every subsidized purchase is an extra purchase." <span class="tap">Tap</span></span><span class="fact">CBO estimated ~68% of EV credit recipients would have bought anyway. Those dollars change nothing.</span></button>
+    <button class="trap" aria-expanded="false"><span class="myth">"Subsidies make things cheaper, full stop." <span class="tap">Tap</span></span><span class="fact">Cheaper at the till, paid for through taxes, by the same people. Plus the deadweight loss.</span></button>
+    <button class="trap" aria-expanded="false"><span class="myth">"Aid goes where the damage is." <span class="tap">Tap</span></span><span class="fact">GAO: in 2019, corn growers got ~$3bn more than their estimated trade damage, while soybean growers got less.</span></button>
+  </div>
+</section>
+
+<!-- 9. SELF-TEST -->
+<section id="quiz">
+  <h2>Self-test</h2>
+  <p class="lede">Three questions. Instant feedback.</p>
+  <div id="quizBox"></div>
+  <div class="score" id="score" aria-live="polite"></div>
+</section>
+
+<!-- 10. DEAL LENS -->
+<section id="deal">
+  <h2>Deal lens</h2>
+  <div class="deal">
+    <p><b>Underwrite ex-subsidy.</b> If margins only work with the credit, you're buying a policy, not a business.</p>
+    <p><b>Model the cliff.</b> One vote halved US EV share in a month. Run a "subsidy off" case on revenue and capex.</p>
+    <p><b>Read the strings.</b> Intel's grant became a 9.9% government stake. Subsidies can bring a new shareholder.</p>
+  </div>
+</section>
+
+<div class="sources">
+  <b>Sources</b>
+  <ul>
+    <li><a href="https://gao.gov/products/gao-22-104259" target="_blank" rel="noopener">GAO: Market Facilitation Program, $23bn</a> · <a href="https://www.farmprogress.com/farm-operations/gao-finds-trump-trade-payments-unfair" target="_blank" rel="noopener">Farm Progress: GAO on corn overpayment</a></li>
+    <li><a href="https://www.coxautoinc.com/market-insights/q3-2025-ev-sales" target="_blank" rel="noopener">Cox Automotive: Q3 2025 EV sales</a> · <a href="https://www.kaxe.org/news/2026-09-30/one-year-after-the-end-of-the-ev-tax-credit-is-the-future-still-electric" target="_blank" rel="noopener">NPR/KAXE: one year after the credit (Edmunds data)</a> · <a href="https://www.moneytalksnews.com/where-the-u-s-ev-market-stands-a-year-after-trump-ended-tax-credits/" target="_blank" rel="noopener">Money Talks News: H1 2026 sales, Honda</a></li>
+    <li><a href="https://source.benchmarkminerals.com/article/record-ev-sales-in-the-us-as-tax-credit-disappears" target="_blank" rel="noopener">Benchmark Minerals: credit coverage, leasing</a> · <a href="https://spectrumlocalnews.com/us/snplus/transportation/2025/10/01/ev-sales-shatter-records-as-federal-tax-credit-ends" target="_blank" rel="noopener">Spectrum News: Hyundai's $7,500 discount</a></li>
+    <li><a href="https://www.openicpsr.org/openicpsr/project/190401/version/V1/view" target="_blank" rel="noopener">Barwick et al. (2023): EV subsidy pass-through</a> · <a href="https://www.everycrsreport.com/reports/IF13089.html" target="_blank" rel="noopener">CRS: economics of EV tax credits (CBO 68%)</a></li>
+    <li><a href="https://www.congress.gov/crs-product/R49031" target="_blank" rel="noopener">CRS: CHIPS fabs and Intel equity</a> · <a href="https://www.manufacturingdive.com/news/biden-administration-finalizes-tsmc-chips-award-phoenix-arizona/733048/" target="_blank" rel="noopener">Manufacturing Dive: TSMC award</a> · <a href="https://referently.com/chips-act-awards-tracker-grants-recipients-and-fab-projects/" target="_blank" rel="noopener">CHIPS awards tracker (Oct 2026)</a></li>
+    <li><a href="https://www.congress.gov/crs-product/IF11364" target="_blank" rel="noopener">CRS: Boeing-Airbus dispute</a> · <a href="https://www.cnbc.com/2026/07/21/boeing-asks-us-to-intervene-over-record-eu-loan-to-airbus.html" target="_blank" rel="noopener">CNBC/Reuters: truce and EU loan (July 2026)</a></li>
+    <li><a href="https://www.europarl.europa.eu/topics/en/article/20210916STO12704/the-eu-common-agricultural-policy-its-reform-and-future-in-brief" target="_blank" rel="noopener">European Parliament: CAP in brief</a> · <a href="https://www.senat.fr/fileadmin/cru-1769414716/Europe_et_international/Europe/Notes/Note_actu_PAC.pdf" target="_blank" rel="noopener">French Senate: post-2027 CAP</a></li>
+  </ul>
+</div>
+</main>
+
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  const set=(el,o)=>{for(const k in o) el.setAttribute(k,o[k])};
+
+  /* ---------- SIMULATOR ---------- */
+  // Units: Q in millions of cars, P in $k. Linear curves through (Q0,P0).
+  const Q0=1.3, P0=50, FLAT=6.25, STEEP=18.75, QMAX=3, PMIN=20, PMAX=80;
+  const X=q=>56+q/QMAX*384, Y=p=>330-(p-PMIN)/(PMAX-PMIN)*310;
+  let dSlope=STEEP, sSlope=FLAT;
+
+  // ticks
+  let h='';
+  [0,1,2,3].forEach(q=>{h+=`<line x1="${X(q)}" y1="330" x2="${X(q)}" y2="335" stroke="var(--ink)"/><text x="${X(q)}" y="349" text-anchor="middle" style="fill:var(--muted)">${q}</text>`});
+  [20,35,50,65,80].forEach(p=>{h+=`<line x1="51" y1="${Y(p)}" x2="56" y2="${Y(p)}" stroke="var(--ink)"/><text x="48" y="${Y(p)+4}" text-anchor="end" style="fill:var(--muted)">$${p}k</text>`});
+  $('ticks').innerHTML=h;
+  set($('p0'),{x1:56,y1:Y(P0),x2:440,y2:Y(P0)});
+
+  // line through (Q0,P0) with slope m, clipped to the plot box
+  function seg(m){
+    const clip=(q)=>{let p=P0+m*(q-Q0); if(p>PMAX){q=Q0+(PMAX-P0)/m;p=PMAX} if(p<PMIN){q=Q0+(PMIN-P0)/m;p=PMIN} return [q,p]};
+    return [clip(0),clip(QMAX)];
+  }
+  const pts=a=>a.map(([q,p])=>X(q)+','+Y(p)).join(' ');
+  const money=k=>'$'+Math.round(k*1000).toLocaleString('en-US');
+  const bn=v=>'$'+v.toFixed(1)+'bn';
+
+  function update(){
+    const s=+$('sub').value;
+    $('subOut').textContent=s===0?'$0':'$'+s+'k';
+    const b=dSlope, d=sSlope;
+    const dQ=s/(b+d), Q1=Q0+dQ, Pb=P0-b*dQ, Ps=P0+d*dQ;
+    const cost=s*Q1, cs=(P0-Pb)*(Q0+Q1)/2, ps=(Ps-P0)*(Q0+Q1)/2, dwl=s*dQ/2, inf=s*Q0;
+    const share=b/(b+d);
+
+    // curves + end labels (labels sit at each curve's right-hand end)
+    const [dA,dB]=seg(-b), [sA,sB]=seg(d);
+    set($('dem'),{x1:X(dA[0]),y1:Y(dA[1]),x2:X(dB[0]),y2:Y(dB[1])});
+    set($('sup'),{x1:X(sA[0]),y1:Y(sA[1]),x2:X(sB[0]),y2:Y(sB[1])});
+    const dly=Math.min(Y(dB[1]),318)-4;
+    set($('dLab'),{x:X(dB[0])+8,y:dly}); set($('dLab2'),{x:X(dB[0])+8,y:dly+14});
+    const sly=Math.max(Y(sB[1]),20)+4;
+    set($('sLab'),{x:X(sB[0])+8,y:sly}); set($('sLab2'),{x:X(sB[0])+8,y:sly+14});
+
+    // areas
+    set($('aCS'),{points:pts([[0,P0],[Q0,P0],[Q1,Pb],[0,Pb]])});
+    set($('aPS'),{points:pts([[0,P0],[0,Ps],[Q1,Ps],[Q0,P0]])});
+    set($('aDWL'),{points:pts([[Q0,P0],[Q1,Ps],[Q1,Pb]])});
+    set($('aCost'),{x:56,y:Y(Ps),width:X(Q1)-56,height:Math.max(0,Y(Pb)-Y(Ps)),visibility:s>0?'visible':'hidden'});
+    set($('pb'),{x1:56,y1:Y(Pb),x2:X(Q1),y2:Y(Pb),visibility:s>0?'visible':'hidden'});
+    set($('ps'),{x1:56,y1:Y(Ps),x2:X(Q1),y2:Y(Ps),visibility:s>0?'visible':'hidden'});
+
+    // markers
+    set($('dot0'),{cx:X(Q0),cy:Y(P0)});
+    const l0=$('l0'); l0.textContent=`Before: ${Q0.toFixed(1)}M at $50k`; set(l0,{x:448,y:Y(P0)+4,'text-anchor':'start'});
+    const on=s>0;
+    set($('dotS'),{cx:X(Q1),cy:Y(Ps),visibility:on?'visible':'hidden'});
+    set($('dotB'),{cx:X(Q1),cy:Y(Pb),visibility:on?'visible':'hidden'});
+    set($('wedge'),{x1:X(Q1),y1:Y(Ps),x2:X(Q1),y2:Y(Pb),visibility:on?'visible':'hidden'});
+    // after-labels sit in the open space between the curves, right of the dots;
+    // slide further right until the curves are far enough apart for two lines of text
+    const dq2=Math.max(0,(34*(PMAX-PMIN)/310 - s)/(b+d));
+    const xL=X(Q1+dq2)+8, yS=Y(Ps+d*dq2)+14, yB=Y(Pb-b*dq2)-6;
+    const kf=v=>'$'+v.toFixed(1)+'k', long=(448-xL)>=118;
+    const lS=$('lS'), lB=$('lB'), lW=$('lW');
+    lS.textContent=on?(long?`Sellers get ${kf(Ps)}`:`Sellers ${kf(Ps)}`):''; set(lS,{x:xL,y:yS});
+    lB.textContent=on?(long?`Buyers pay ${kf(Pb)}`:`Buyers ${kf(Pb)}`):''; set(lB,{x:xL,y:yB});
+    lW.textContent='';
+
+    // capture bar
+    const bp=Math.round(share*100);
+    $('barB').style.flexBasis=bp+'%'; $('barS').style.flexBasis=(100-bp)+'%';
+    $('barB').textContent=`Buyers ${bp}%`; $('barS').textContent=`Sellers ${100-bp}%`;
+
+    // readout
+    $('oPb').textContent=money(Pb)+(on?` (−${money(P0-Pb)})`:'');
+    $('oPs').textContent=money(Ps)+(on?` (+${money(Ps-P0)})`:'');
+    $('oCost').textContent=(on?'−':'')+bn(cost);
+    $('oDQ').textContent='+'+Math.round(dQ*1000).toLocaleString('en-US')+'k';
+    $('oCS').textContent=(on?'+':'')+bn(cs);
+    $('oPS').textContent=(on?'+':'')+bn(ps);
+    $('oDWL').textContent=(on?'−':'')+bn(dwl);
+    $('oInf').textContent=on?`${bn(inf)} (${Math.round(inf/cost*100)}% of the total)`:'$0.0bn';
+  }
+  $('sub').addEventListener('input',update);
+  document.querySelectorAll('.pill').forEach(btn=>btn.addEventListener('click',()=>{
+    const g=btn.dataset.g;
+    document.querySelectorAll(`.pill[data-g="${g}"]`).forEach(x=>x.setAttribute('aria-pressed','false'));
+    btn.setAttribute('aria-pressed','true');
+    const v=btn.dataset.v==='steep'?STEEP:FLAT;
+    if(g==='d') dSlope=v; else sSlope=v;
+    update();
+  }));
+  update();
+
+  /* ---------- FLOW ---------- */
+  const steps=[
+    {line:'The state hands out grants, tax credits or cheap loans to a chosen sector.',ex:'<b>2022:</b> the CHIPS Act puts $52.7bn behind US chipmaking, $39bn of it for factories.'},
+    {line:'Producers use the money to build capacity or cut prices to win share.',ex:'<b>TSMC:</b> $6.6bn in grants toward three Arizona fabs; its pledged investment grew from $65bn to $165bn.'},
+    {line:'Part of the money reaches buyers as lower prices. How much depends on who is less flexible.',ex:'<b>EVs:</b> across 13 countries (2013–20), 70–80% of subsidies showed up in lower prices.'},
+    {line:'Competitors without the money cry foul.',ex:'<b>2004:</b> the US and EU file rival WTO cases over Airbus and Boeing. July 2026: Boeing objects to a €3bn EU loan to Airbus.'},
+    {line:'Trade partners hit back with tariffs, or fight it out at the WTO for years.',ex:'<b>2019:</b> the WTO lets the US tariff $7.5bn a year of EU goods, its largest award ever. The EU wins $4bn in 2020.'},
+    {line:'The bill lands on the treasury, which means citizens.',ex:'<b>2018–19:</b> $23bn in US farm aid. <b>2021–27:</b> €386.6bn for EU farm policy, about a third of the EU budget.'}
+  ];
+  const panel=$('flowPanel');
+  const showStep=i=>{
+    document.querySelectorAll('.step').forEach(b=>b.setAttribute('aria-expanded',String(+b.dataset.i===i)));
+    panel.innerHTML=`<p class="line">${steps[i].line}</p><p class="ex">${steps[i].ex}</p>`;
+  };
+  document.querySelectorAll('.step').forEach(b=>b.addEventListener('click',()=>showStep(+b.dataset.i)));
+  showStep(0);
+
+  /* ---------- TOGGLES ---------- */
+  document.querySelectorAll('.card,.trap,.pcard').forEach(b=>b.addEventListener('click',()=>{
+    b.setAttribute('aria-expanded',b.getAttribute('aria-expanded')==='true'?'false':'true');
+  }));
+
+  /* ---------- QUIZ ---------- */
+  const Q=[
+    {q:'Car factories are maxed out (steep supply) and buyers shop around a lot (flat demand). A new $5,000 subsidy mostly ends up with…',
+     o:['Buyers, because they claim the credit','Sellers, through higher prices','The government','Split exactly 50/50 by law'],a:1,
+     e:'The less flexible side captures it. If supply can\'t grow, sellers just raise prices. Try it in the simulator: flat demand plus steep supply.'},
+    {q:'CBO estimated what share of US EV credit recipients would have bought an EV anyway?',
+     o:['About 10%','About a third','About two-thirds','All of them'],a:2,
+     e:'~68% (CBO, 2023). For those buyers the credit changed nothing but the price, which is why per extra EV the cost is far above $7,500.'},
+    {q:'After 17 years at the WTO, what did the Airbus vs. Boeing cases conclude?',
+     o:['Only Airbus was subsidized','Only Boeing was subsidized','Both got illegal support','Neither did'],a:2,
+     e:'Both sides won partial victories. The US got the right to tariff $7.5bn a year of EU goods, the EU $4bn of US goods, before a truce in 2021.'}
+  ];
+  let answered=0, right=0;
+  const box=$('quizBox');
+  Q.forEach((it,qi)=>{
+    const d=document.createElement('div'); d.className='q';
+    d.innerHTML=`<p class="qt">${qi+1}. ${it.q}</p><div class="opts">${it.o.map((o,oi)=>`<button class="opt" data-oi="${oi}">${o}</button>`).join('')}</div><p class="fb" role="status"></p>`;
+    box.appendChild(d);
+    d.querySelectorAll('.opt').forEach(btn=>btn.addEventListener('click',()=>{
+      const oi=+btn.dataset.oi, ok=oi===it.a;
+      d.querySelectorAll('.opt').forEach(x=>{x.disabled=true; if(+x.dataset.oi===it.a) x.classList.add('right');});
+      if(!ok) btn.classList.add('wrong');
+      const fb=d.querySelector('.fb'); fb.classList.add('show');
+      fb.innerHTML=`<b class="${ok?'gain':'loss'}">${ok?'Correct.':'Not quite.'}</b> ${it.e}`;
+      answered++; if(ok) right++;
+      if(answered===Q.length) $('score').textContent=`Score: ${right}/3. ${right===3?'You read subsidies like a deal team.':'Go back to the simulator and flip the curves.'}`;
+    }));
+  });
+})();
+</script>
+</body>
+</html>

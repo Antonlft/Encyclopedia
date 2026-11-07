@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Capsule 1 · Money &amp; Banking (Central Banking 101)</title>
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light;
+  --bg:#f7f7f5; --surface:#ffffff; --surface2:#f0f1ee; --text:#1a1d21; --muted:#59636e; --line:#dcdfe3;
+  --accent:#2457d6; --accent-soft:#e6edfc; --on-accent:#ffffff;
+  --gain:#177a45; --gain-soft:#e2f4ea; --loss:#bf3329; --loss-soft:#fbe7e5; --warn:#9a5b00; --warn-soft:#fdf0d9;
+  --cur:#6b7280; --res:#2457d6; --dep:#7a3fe0; --tre:#b4730f;
+  --cur-soft:#eceef1; --res-soft:#e6edfc; --dep-soft:#efe7fc; --tre-soft:#fbefd9;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0f1216; --surface:#171b21; --surface2:#1e232a; --text:#e8ebef; --muted:#9aa5b1; --line:#2b323b;
+    --accent:#7aa2ff; --accent-soft:#1c2a4a; --on-accent:#0b1020;
+    --gain:#4cc38a; --gain-soft:#133324; --loss:#ff7b70; --loss-soft:#3a1916; --warn:#f0b45a; --warn-soft:#3a2a10;
+    --cur:#9aa3af; --res:#7aa2ff; --dep:#b793ff; --tre:#f0b45a;
+    --cur-soft:#232830; --res-soft:#1c2a4a; --dep-soft:#2a2040; --tre-soft:#3a2a10;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0f1216; --surface:#171b21; --surface2:#1e232a; --text:#e8ebef; --muted:#9aa5b1; --line:#2b323b;
+  --accent:#7aa2ff; --accent-soft:#1c2a4a; --on-accent:#0b1020;
+  --gain:#4cc38a; --gain-soft:#133324; --loss:#ff7b70; --loss-soft:#3a1916; --warn:#f0b45a; --warn-soft:#3a2a10;
+  --cur:#9aa3af; --res:#7aa2ff; --dep:#b793ff; --tre:#f0b45a;
+  --cur-soft:#232830; --res-soft:#1c2a4a; --dep-soft:#2a2040; --tre-soft:#3a2a10;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-text-size-adjust:100%}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:900px;margin:0 auto;padding:0 16px 48px}
+header.top{padding:22px 0 10px}
+.kicker{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font-size:clamp(26px,5.5vw,36px);line-height:1.12;margin:6px 0 8px}
+h2{font-size:22px;line-height:1.2;margin:0 0 6px}
+h3{font-size:15px;margin:0 0 6px}
+p{margin:6px 0}
+.sub{color:var(--muted);margin:0 0 10px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 10px;font-size:13px;color:var(--muted);margin:8px 0}
+.sw{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding:8px 16px;max-width:900px;margin:0 auto;scrollbar-width:thin}
+.tabs button{white-space:nowrap;border:1px solid var(--line);background:var(--surface);color:var(--text);padding:8px 13px;border-radius:999px;font:inherit;font-size:14px;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent);font-weight:600}
+.tab{display:none}
+.tab.on{display:block}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:14px 0}
+.hook{border-left:4px solid var(--accent);padding:4px 0 4px 14px;margin:18px 0 6px}
+.hook .num{font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--accent);text-transform:uppercase}
+.label{font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+.chip{display:inline-block;font-size:11px;font-weight:700;padding:1px 7px;border-radius:999px;vertical-align:middle;margin-left:4px;white-space:nowrap}
+.chip.book{background:var(--surface2);color:var(--muted);border:1px solid var(--line)}
+.chip.ok{background:var(--gain-soft);color:var(--gain)}
+.chip.mine{background:var(--accent-soft);color:var(--accent)}
+.chip.op{background:var(--warn-soft);color:var(--warn)}
+.receipt{list-style:none;padding:0;margin:8px 0 0}
+.receipt li{display:flex;gap:10px;justify-content:space-between;align-items:baseline;padding:7px 0;border-top:1px dashed var(--line);font-size:14px}
+.receipt li span:first-child{flex:1}
+.receipt li b{white-space:nowrap;font-variant-numeric:tabular-nums;text-align:right}
+.pull{background:var(--accent-soft);border-radius:10px;padding:9px 12px;margin-top:10px;font-weight:600}
+.how{font-size:13px;color:var(--muted);background:var(--surface2);border-radius:8px;padding:7px 10px;margin:8px 0}
+.calib{font-size:13px;color:var(--muted);border-top:1px solid var(--line);margin-top:10px;padding-top:8px}
+.seg{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.seg button,.btn{border:1px solid var(--line);background:var(--surface2);color:var(--text);padding:7px 11px;border-radius:9px;font:inherit;font-size:14px;cursor:pointer}
+.seg button.on{background:var(--accent);color:var(--on-accent);border-color:var(--accent);font-weight:600}
+.ctrl{margin:10px 0}
+.ctrl label{display:flex;justify-content:space-between;gap:8px;font-size:14px;margin-bottom:2px}
+.ctrl label b{font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.grid{display:grid;gap:10px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media (max-width:640px){.g3,.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:420px){.g2,.g3,.g4{grid-template-columns:minmax(0,1fr)}}
+.pick{display:block;width:100%;text-align:left;border:1px solid var(--line);border-left:5px solid var(--c,var(--line));background:var(--surface);color:var(--text);padding:10px 12px;border-radius:10px;font:inherit;cursor:pointer}
+.pick small{display:block;color:var(--muted);font-size:12.5px}
+.pick[aria-pressed="true"]{background:var(--cs,var(--accent-soft));outline:2px solid var(--c,var(--accent))}
+.m-cur{--c:var(--cur);--cs:var(--cur-soft)}.m-res{--c:var(--res);--cs:var(--res-soft)}
+.m-dep{--c:var(--dep);--cs:var(--dep-soft)}.m-tre{--c:var(--tre);--cs:var(--tre-soft)}
+.detail{background:var(--surface2);border-radius:10px;padding:10px 12px;margin-top:10px;font-size:14.5px}
+.detail ul{margin:4px 0 0;padding-left:18px}
+.detail li{margin:3px 0}
+dl.kv{display:grid;grid-template-columns:110px 1fr;gap:4px 10px;margin:0}
+dl.kv dt{color:var(--muted);font-size:13px}
+dl.kv dd{margin:0}
+table.mx{width:100%;border-collapse:collapse;font-size:14px}
+table.mx th,table.mx td{border-bottom:1px solid var(--line);padding:6px 6px;text-align:center}
+table.mx th:first-child,table.mx td:first-child{text-align:left}
+.yes{color:var(--gain);font-weight:700}.no{color:var(--loss);font-weight:700}.mid{color:var(--warn);font-weight:700}
+.tgrid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+.ta{border:1px solid var(--line);border-radius:10px;overflow:hidden;font-size:13.5px;background:var(--surface)}
+.ta h4{margin:0;padding:6px 10px;background:var(--surface2);font-size:13.5px}
+.ta .cols{display:grid;grid-template-columns:1fr 1fr}
+.ta .cols>div{padding:6px 10px;min-height:48px}
+.ta .cols>div:first-child{border-right:1px solid var(--line)}
+.ta .cols small{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}
+.up{color:var(--gain);font-weight:600}.dn{color:var(--loss);font-weight:600}
+.flow{display:flex;flex-direction:column;gap:6px;margin:8px 0}
+.step{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;border:1px solid var(--line);background:var(--surface);color:var(--text);padding:9px 11px;border-radius:10px;font:inherit;cursor:pointer}
+.step .n{flex:none;width:24px;height:24px;border-radius:50%;background:var(--surface2);display:grid;place-items:center;font-size:13px;font-weight:700}
+.step[aria-expanded="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.step[aria-expanded="true"] .n{background:var(--accent);color:var(--on-accent)}
+.step .ex{display:none;margin-top:4px;font-size:14px;color:var(--muted)}
+.step[aria-expanded="true"] .ex{display:block}
+.rem{counter-reset:r;display:grid;gap:8px}
+.rem div{counter-increment:r;position:relative;padding:10px 12px 10px 42px;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+.rem div::before{content:counter(r);position:absolute;left:11px;top:10px;width:22px;height:22px;border-radius:50%;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font-size:13px;font-weight:700}
+.trap{display:grid;grid-template-columns:1fr;gap:2px;padding:9px 12px;background:var(--surface);border:1px solid var(--line);border-radius:10px;margin:6px 0;font-size:14.5px}
+.trap .x{color:var(--loss);font-weight:600}.trap .v{color:var(--gain);font-weight:600}
+.sowhat{background:var(--warn-soft);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:14px 0}
+.sowhat h3{color:var(--warn)}
+.flagbox{background:var(--surface2);border:1px dashed var(--line);border-radius:12px;padding:10px 14px;margin:14px 0;font-size:14px}
+.flagbox ul{margin:4px 0 0;padding-left:18px}
+.bars{display:grid;gap:7px;margin:8px 0}
+.bar{display:grid;grid-template-columns:150px 1fr 56px;align-items:center;gap:8px;font-size:13.5px}
+.bar .track{height:16px;border-radius:8px;background:var(--surface2);overflow:hidden}
+.bar .fill{height:100%;border-radius:8px;background:var(--accent)}
+.bar b{text-align:right;font-variant-numeric:tabular-nums}
+@media (max-width:480px){.bar{grid-template-columns:100px 1fr 48px}}
+.stress{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:14px}
+@media (max-width:640px){.stress{grid-template-columns:minmax(0,1fr)}}
+.bs{display:flex;gap:14px;align-items:flex-end}
+.col{flex:1;display:flex;flex-direction:column;justify-content:flex-end}
+.col .t{font-size:12px;text-align:center;color:var(--muted);margin-bottom:4px;font-weight:600}
+.stack{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--surface2)}
+.seg-b{width:100%}
+.s-liq{background:var(--res)}.s-loan{background:var(--cur)}.s-loss{background:var(--loss)}
+.s-dep{background:var(--dep)}.s-eq{background:var(--gain)}
+.keyt{font-size:13px;margin:8px 0;display:grid;gap:3px}
+.keyt div{display:flex;justify-content:space-between;gap:8px;border-bottom:1px dotted var(--line);padding:2px 0}
+.keyt b{font-variant-numeric:tabular-nums}
+.meter{position:relative;height:30px;margin:30px 0 56px}
+.meter .rail{position:absolute;left:0;right:0;top:11px;height:8px;border-radius:4px;background:var(--surface2);border:1px solid var(--line)}
+.meter .zone{position:absolute;top:11px;height:8px;border-radius:0 4px 4px 0;background:var(--loss-soft);border:1px solid var(--loss);border-left:none}
+.meter .mk{position:absolute;top:0;transform:translateX(-50%);text-align:center;font-size:11.5px;font-weight:700;white-space:nowrap}
+.meter .mk::after{content:"";display:block;width:3px;height:30px;margin:0 auto;background:currentColor;border-radius:2px}
+.meter .mk span{position:absolute;bottom:34px;left:50%;transform:translateX(-50%)}
+.meter .mk.low span{bottom:auto;top:34px}
+.meter .ends{position:absolute;top:56px;left:0;right:0;display:flex;justify-content:space-between;font-size:11px;color:var(--muted)}
+.badge{display:block;padding:9px 12px;border-radius:10px;font-weight:700;margin:10px 0}
+.badge.g{background:var(--gain-soft);color:var(--gain)}.badge.a{background:var(--warn-soft);color:var(--warn)}.badge.r{background:var(--loss-soft);color:var(--loss)}
+.pipe{display:flex;flex-direction:column;gap:0;margin:8px 0}
+.node{display:grid;grid-template-columns:30px 1fr;gap:10px;padding:7px 0;position:relative}
+.node .dot{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700;background:var(--surface2);border:2px solid var(--line);z-index:1}
+.node::before{content:"";position:absolute;left:12px;top:30px;bottom:-8px;width:2px;background:var(--line)}
+.node:last-child::before{display:none}
+.node.us .dot{border-color:var(--accent);background:var(--accent-soft)}
+.node.fed .dot{border-color:var(--res);background:var(--res-soft)}
+.node.blocked .dot{border-color:var(--loss);background:var(--loss-soft);color:var(--loss)}
+.node.dead{opacity:.45}
+.node b{display:block;font-size:14.5px}.node span{font-size:13.5px;color:var(--muted)}
+.node .tag{display:inline-block;font-size:10.5px;font-weight:700;padding:0 6px;border-radius:999px;background:var(--accent-soft);color:var(--accent);margin-left:6px;vertical-align:1px}
+.node.blocked .tag{background:var(--loss-soft);color:var(--loss)}
+svg text{fill:var(--text);font-family:inherit}
+svg .mut{fill:var(--muted)}
+svg .gl{stroke:var(--line)}
+.quiz .q{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:12px 0}
+.quiz .opt{display:block;width:100%;text-align:left;margin:6px 0;border:1px solid var(--line);background:var(--surface2);color:var(--text);padding:9px 11px;border-radius:9px;font:inherit;font-size:14.5px;cursor:pointer}
+.quiz .opt.right{background:var(--gain-soft);border-color:var(--gain);color:var(--gain);font-weight:600}
+.quiz .opt.wrong{background:var(--loss-soft);border-color:var(--loss);color:var(--loss)}
+.quiz .why{display:none;margin-top:6px;font-size:14px;background:var(--surface2);border-radius:8px;padding:8px 10px}
+.quiz .q.done .why{display:block}
+.quiz .q.done .opt{cursor:default}
+.src li{margin:5px 0;font-size:14px}
+.src a{color:var(--accent);word-break:break-word}
+footer{color:var(--muted);font-size:12.5px;margin-top:28px}
+.scroll{overflow-x:auto}
+</style>
+</head>
+<body>
+<div class="nav"><div class="tabs" role="tablist" id="tabs"></div></div>
+<div class="wrap">
+<header class="top">
+  <div class="kicker">Knowledge Capsule 1 of 3 · Central Banking 101 (Joseph Wang)</div>
+  <h1>Money &amp; Banking: who really creates money?</h1>
+  <p class="sub">Section I of the book (Ch. 1–4): four kinds of money, three money creators, shadow banks, the offshore dollar. One tab per chapter.</p>
+  <div class="legend">
+    <span><i class="sw" style="background:var(--cur)"></i>Currency</span>
+    <span><i class="sw" style="background:var(--res)"></i>Reserves</span>
+    <span><i class="sw" style="background:var(--dep)"></i>Deposits</span>
+    <span><i class="sw" style="background:var(--tre)"></i>Treasuries</span>
+    <span><i class="sw" style="background:var(--gain)"></i>Gain / safe</span>
+    <span><i class="sw" style="background:var(--loss)"></i>Loss / risk</span>
+  </div>
+  <div class="legend">
+    <span><span class="chip book">BOOK</span> from the book (data ≈2020, not re-checked)</span>
+    <span><span class="chip ok">CHECKED</span> verified online, 2026</span>
+    <span><span class="chip mine">MY ADD</span> not in the book</span>
+    <span><span class="chip op">OPINION</span> author’s view, contested</span>
+  </div>
+</header>
+
+<!-- ============ TAB 1 ============ -->
+<section class="tab" id="t-money">
+  <div class="hook"><div class="num">Chapter 1 · Types of money</div><h2>Money is four IOUs, not one</h2><p>Currency, reserves, deposits and Treasuries come from different issuers. All trade at par, until the conversion pipe breaks.</p></div>
+
+  <div class="card">
+    <div class="label">Real-life case</div>
+    <h3>March 2020: the Treasury “ATM” broke</h3>
+    <p>Funds and foreign central banks raced to raise dollars and sold Treasuries. Dealers hit their balance-sheet limits and stopped buying. Even the safest bond couldn’t be sold at a fair price, until the Fed became the buyer.</p>
+    <ul class="receipt">
+      <li><span>Mar 15, 2020: Fed announces it will buy at least $500B Treasuries and $200B agency MBS <span class="chip ok">CHECKED</span></span><b>≥ $700B</b></li>
+      <li><span>Bought by mid-June 2020: Treasuries / agency MBS (Fed Monetary Policy Report) <span class="chip ok">CHECKED</span></span><b>$1.6T / $719B</b></li>
+      <li><span>Peak daily pace, Treasuries <span class="chip ok">CHECKED</span></span><b>~$75B/day</b></li>
+      <li><span>Why dealers stalled: balance-sheet limits (book blames post-2008 rules) <span class="chip book">BOOK</span></span><b>—</b></li>
+    </ul>
+    <div class="pull">Lesson: a Treasury only counts as “money” if you can turn it into a bank deposit at once. In March 2020 you couldn’t.</div>
+    <div class="calib">NY Fed research agrees that dealer balance sheets were the bottleneck. Whether post-2008 regulation was a main cause is debated; I did not check that point.</div>
+  </div>
+
+  <div class="card">
+    <div class="label">Interactive 1 · Money map</div>
+    <p class="how">How to read: tap a money type to see who issues it, who can hold it and where the risk sits.</p>
+    <div class="grid g4" id="moneyPick"></div>
+    <div class="detail" id="moneyDetail"></div>
+    <div class="scroll" style="margin-top:12px"><table class="mx">
+      <tr><th>Who can hold it?</th><th>Currency</th><th>Reserves</th><th>Deposits</th><th>Treasuries</th></tr>
+      <tr><td>Households</td><td class="yes">✓</td><td class="no">✗</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+      <tr><td>Big investors</td><td class="yes">✓</td><td class="no">✗</td><td class="mid">✓ but uninsured above $250k</td><td class="yes">✓ their “money”</td></tr>
+      <tr><td>Commercial banks</td><td class="yes">✓</td><td class="yes">✓</td><td class="mid">✓ at other banks</td><td class="yes">✓</td></tr>
+    </table></div>
+    <div class="calib">Reserves are also held by the US Treasury (its Fed account) and a few others such as GSEs <span class="chip book">BOOK</span>. FDIC limit: $250,000 per depositor, per bank, per ownership category <span class="chip ok">CHECKED</span> (consumer guides, 2026; confirm at fdic.gov).</div>
+  </div>
+
+  <div class="card">
+    <div class="label">Interactive 2 · The Fed buys Treasuries (QE in accounting terms)</div>
+    <p class="how">How to read: green = balance goes up, red = goes down. Change who sells, and watch where the deposits appear.</p>
+    <div class="ctrl"><label><span>Fed buys Treasuries worth</span><b id="qeAmt">$10B</b></label><input type="range" id="qeR" min="1" max="100" value="10"></div>
+    <div class="seg" id="qeSeller"><button data-s="bank" class="on">Seller is a commercial bank</button><button data-s="corp">Seller is a corporation</button></div>
+    <div class="tgrid" id="qeGrid"></div>
+    <div class="detail" id="qeSum"></div>
+    <div class="calib">Calibrated to the book’s balance-sheet examples <span class="chip book">BOOK</span>. It shows accounting only: no price effects, no portfolio rebalancing, no change in what banks choose to do next.</div>
+  </div>
+
+  <div class="card">
+    <div class="label">Step by step · A Treasury bond becomes a doctor’s paycheck</div>
+    <p class="how">How to read: tap a step to open the example.</p>
+    <div class="flow" id="flow1"></div>
+    <div class="calib">Example from the book: Treasury raises $100 and pays Medicare. Net effect: deposits and reserves unchanged, $100 more Treasuries outstanding <span class="chip book">BOOK</span>.</div>
+  </div>
+
+  <div class="card">
+    <div class="label">Key actors · who holds what, and why</div>
+    <div class="grid g2" id="act1"></div>
+    <div class="detail" id="act1d"></div>
+  </div>
+
+  <div class="card"><div class="label">Remember these 3</div><div class="rem">
+    <div><b>Four monies, one rule.</b> They must convert into each other at par. Crises are conversion failures.</div>
+    <div><b>Only the Fed creates reserves; banks create deposits when they lend.</b> Reserves never leave the Fed. They only move between accounts.</div>
+    <div><b>Treasuries are money for big investors,</b> but their price floats, so “moneyness” is not perfect.</div>
+  </div></div>
+
+  <div class="card"><div class="label">Common traps</div>
+    <div class="trap"><span class="x">✗ “Banks lend out the deposits they collect.”</span><span class="v">✓ The book’s view: a loan creates a new deposit; deposits are destroyed when loans are repaid.</span></div>
+    <div class="trap"><span class="x">✗ “QE gave banks money to lend.”</span><span class="v">✓ Reserves can’t leave the Fed. Lending is limited by regulation and by finding profitable borrowers.</span></div>
+    <div class="trap"><span class="x">✗ “Cash on the sidelines will flood the stock market.”</span><span class="v">✓ Buying a stock moves a deposit from you to the seller. Total deposits don’t change.</span></div>
+    <div class="trap"><span class="x">✗ “A central bank digital currency would clearly be safer and faster.”</span><span class="v">✓ <span class="chip op">OPINION</span> The author argues the benefits are illusory and the privacy cost is high. Supporters disagree; I did not review that literature.</span></div>
+  </div>
+
+  <div class="sowhat"><h3>So what? (investor lens) <span class="chip mine">MY ADD</span></h3>
+    <p>Treasuries are the cash-like asset big investors park money in, and the base for the risk-free rate in valuation. Above $250k, a deposit is an unsecured credit exposure to the bank (see tab 2).</p></div>
+
+  <div class="flagbox"><b>Book vs today</b>
+    <ul>
+      <li>Typo in the book: currency in circulation “$20 trillion in 2020”. Two lines later it says $2 trillion. Fed data: about <b>$2.44T</b> (week averaged to Mar 18, 2026) <span class="chip ok">CHECKED</span></li>
+      <li>Reserves: book shows $1.68T held by banks (Jan 2020). Fed H.4.1 reserve balances were about <b>$3.0T</b> (week avg ending Sept 16, 2026) <span class="chip ok">CHECKED</span></li>
+    </ul></div>
+</section>
+
+<!-- ============ TAB 2 ============ -->
+<section class="tab" id="t-creators">
+  <div class="hook"><div class="num">Chapter 2 · The money creators</div><h2>Fed, banks, Treasury: three creators, three constraints</h2><p>The Fed creates reserves, banks create deposits, the Treasury creates securities. A bank’s real problem is staying solvent and liquid.</p></div>
+
+  <div class="card">
+    <div class="label">Real-life case <span class="chip mine">MY ADD</span></div>
+    <h3>Silicon Valley Bank, March 2023: a quarter of deposits gone in a day</h3>
+    <p>A bank funded mostly by uninsured, institutional deposits held securities that had lost value. Once clients doubted it, they ran.</p>
+    <ul class="receipt">
+      <li><span>Mar 9, 2023: withdrawal requests, about a quarter of deposits (Fed’s Barr; CNBC) <span class="chip ok">CHECKED</span></span><b>$42B</b></li>
+      <li><span>Mar 10: bank fails; further requests waiting that morning <span class="chip ok">CHECKED</span></span><b>~$100B more</b></li>
+      <li><span>Uninsured share of deposits: sources differ (Dec 2022 call report vs S&amp;P/Yale) <span class="chip ok">CHECKED</span></span><b>86–94%</b></li>
+      <li><span>Drivers per a Fed-commissioned review, reported Sept 2026: unrealised losses above capital, run-prone deposits, not ready to borrow at the discount window <span class="chip ok">CHECKED</span></span><b>—</b></li>
+    </ul>
+    <div class="pull">Lesson: solvency (are assets worth more than debts?) and liquidity (can you pay today?) are different tests. Banks can fail either one.</div>
+    <div class="calib">The last row comes from a press summary (ANI/Tribune) of the review, not from the report itself.</div>
+  </div>
+
+  <div class="card">
+    <div class="label">Interactive 1 · Bank stress test</div>
+    <p class="how">How to read: a loss lands first on equity (green), then on depositors. Withdrawals are paid from liquid assets (blue). Slide and watch the markers move.</p>
+    <div class="seg" id="presets"><button data-p="normal">Normal day</button><button data-p="loss">Loan losses</button><button data-p="run">SVB-style run</button></div>
+    <div class="stress">
+      <div>
+        <div class="ctrl"><label><span>Equity cushion (% of assets)</span><b id="vEq"></b></label><input type="range" id="sEq" min="2" max="12" step="0.5" value="5"></div>
+        <div class="ctrl"><label><span>Liquid assets (% of assets)</span><b id="vLiq"></b></label><input type="range" id="sLiq" min="0" max="40" step="1" value="10"></div>
+        <div class="ctrl"><label><span>Loss on loans &amp; securities</span><b id="vLoss"></b></label><input type="range" id="sLoss" min="0" max="20" step="0.5" value="0"></div>
+        <div class="ctrl"><label><span>Deposits withdrawn</span><b id="vOut"></b></label><input type="range" id="sOut" min="0" max="40" step="1" value="5"></div>
+      </div>
+      <div>
+        <div class="bs" id="bs"></div>
+      </div>
+    </div>
+    <div class="label" style="margin-top:12px">Solvency meter: loss vs what equity can absorb</div>
+    <div class="meter" id="m1"></div>
+    <div class="label">Liquidity meter: withdrawals vs liquid assets (per $100 of assets)</div>
+    <div class="meter" id="m2"></div>
+    <div class="badge" id="status"></div>
+    <div class="keyt" id="keyt"></div>
+    <div class="calib">Calibrated to the book’s example: about $5 of equity supports $100 of loans, so a 5% loss wipes it out <span class="chip book">BOOK</span>. The “SVB-style” preset is illustrative, not SVB’s balance sheet. Real life differs: risk-weighted capital rules, liquidity rules, FDIC insurance, and the option to sell securities or borrow (which can turn paper losses into real ones).</div>
+  </div>
+
+  <div class="card">
+    <div class="label">Interactive 2 · One bank vs two banks</div>
+    <p class="how">How to read: John (Alpha Bank’s client) pays Tim $1M. Switch to two banks and cut Alpha’s reserves to see when it must borrow.</p>
+    <div class="seg" id="azSeg"><button data-n="1">World with one bank</button><button data-n="2" class="on">World with two banks</button></div>
+    <div id="azBody"></div>
+    <div class="calib">Alpha/Zed example from the book <span class="chip book">BOOK</span>. Discount-window borrowing carries a stigma, so banks use it last <span class="chip book">BOOK</span>.</div>
+  </div>
+
+  <div class="card">
+    <div class="label">Step by step · Life of a loan</div>
+    <p class="how">How to read: tap a step to open the example (John the farmer and Tim the lumberjack).</p>
+    <div class="flow" id="flow2"></div>
+  </div>
+
+  <div class="card">
+    <div class="label">Key actors · the three creators</div>
+    <div class="grid g3" id="act2"></div>
+    <div class="detail" id="act2d"></div>
+  </div>
+
+  <div class="card">
+    <div class="label">Where to look: free bank data <span class="chip book">BOOK</span></div>
+    <div class="grid g3">
+      <div class="detail"><b>Call Reports</b><br>Each US bank, quarterly (FFIEC). Public about 6 weeks after quarter-end.</div>
+      <div class="detail"><b>H.8</b><br>All US commercial banks combined, weekly (Fed). Good for macro trends.</div>
+      <div class="detail"><b>BIS banking statistics</b><br>Global banking, quarterly. Needed to see the offshore dollar system.</div>
+    </div>
+  </div>
+
+  <div class="card"><div class="label">Remember these 3</div><div class="rem">
+    <div><b>Lending creates deposits.</b> Reserves are only for settling between banks.</div>
+    <div><b>Two ways to die:</b> insolvent (bad assets) or illiquid (can’t pay today). Solvency needs capital; liquidity needs a lender.</div>
+    <div><b>The limits are regulation and profit,</b> so banks create more money in booms and less in recessions.</div>
+  </div></div>
+
+  <div class="card"><div class="label">Common traps</div>
+    <div class="trap"><span class="x">✗ “A bank needs reserves before it can lend.”</span><span class="v">✓ Book: it lends first and borrows reserves later if needed.</span></div>
+    <div class="trap"><span class="x">✗ “The discount window is a normal funding line.”</span><span class="v">✓ It is the last resort because using it signals distress.</span></div>
+    <div class="trap"><span class="x">✗ “Rising US debt means a crisis is imminent.”</span><span class="v">✓ <span class="chip op">OPINION</span> The book notes Japan runs far higher debt and yields fell. It also says a limit exists but is unclear. Contested.</span></div>
+    <div class="trap"><span class="x">✗ “Big QE always lifts inflation.”</span><span class="v">✓ <span class="chip book">BOOK</span> The Fed, BoJ and ECB missed targets for a decade despite QE. That line is dated: US inflation later ran well above 2%. I did not pull the figures for this capsule.</span></div>
+  </div>
+
+  <div class="sowhat"><h3>So what? (deal lens) <span class="chip mine">MY ADD</span></h3>
+    <p>Banks run at roughly 20x leverage, so small asset losses hit equity fast. That is why bank deals are priced off tangible equity, and why uninsured institutional deposits leave first.</p></div>
+</section>
+
+<!-- ============ TAB 3 ============ -->
+<section class="tab" id="t-shadow">
+  <div class="hook"><div class="num">Chapter 3 · The shadow banks</div><h2>Banking without the safety net</h2><p>Shadow banks borrow short and hold longer assets like banks do, but they have no deposit insurance and no Fed discount window.</p></div>
+
+  <div class="card">
+    <div class="label">Real-life case</div>
+    <h3>Reserve Primary Fund, September 2008: a 3-cent loss starts a run</h3>
+    <p>A money fund that investors treated like a bank account held a little Lehman debt. When Lehman failed, the fund could not pay out a full $1 per share.</p>
+    <ul class="receipt">
+      <li><span>Fund size <span class="chip ok">CHECKED</span></span><b>$65B</b></li>
+      <li><span>Lehman debt held (about 1.2% of assets) <span class="chip ok">CHECKED</span></span><b>$785M</b></li>
+      <li><span>Sept 16, 2008: value per share falls from $1.00 to <span class="chip ok">CHECKED</span></span><b>$0.97</b></li>
+      <li><span>Withdrawn from prime money funds across the industry in the next 2 days <span class="chip ok">CHECKED</span></span><b>~$200B</b></li>
+      <li><span>Sept 19: Treasury guarantees money funds; Fed announces a liquidity facility <span class="chip ok">CHECKED</span></span><b>—</b></li>
+    </ul>
+    <div class="pull">Lesson: if investors believe “$1 in = $1 out” and it fails once, everyone rushes the exit at the same time.</div>
+    <div class="calib">The book says $42B left a fund that had $65B, and names the Fed’s Money Market Investor Funding Facility. An early industry report shows ~$27B out in two days, and the facility announced on Sept 19 was a different one (AMLF, per IMMFA). I could not reconcile the outflow figure and did not verify the MMIFF date.</div>
+  </div>
+
+  <div class="card">
+    <div class="label">Interactive · Leverage vs. a price drop (mortgage REIT)</div>
+    <p class="how">How to read: each line is a leverage level. Move along the bottom (price drop of the assets) and the dot shows how much of the owners’ equity survives.</p>
+    <div class="ctrl"><label><span>Leverage (borrowed $ per $1 of equity)</span><b id="vL"></b></label><input type="range" id="sL" min="0" max="10" step="0.5" value="5"></div>
+    <div class="ctrl"><label><span>Fall in asset prices</span><b id="vS"></b></label><input type="range" id="sS" min="0" max="15" step="0.25" value="0"></div>
+    <svg id="lev" viewBox="0 0 640 340" role="img" aria-label="Equity remaining versus asset price drop for different leverage levels" style="width:100%;height:auto"></svg>
+    <div class="detail" id="levOut"></div>
+    <div class="calib">Calibrated to the book’s example: borrow at 0.3% (one-month repo), buy 30-year Agency MBS at 2.5%, leverage up to ~8x; investors lost over half their capital in March 2020 <span class="chip book">BOOK</span>. This is arithmetic, not data on a specific fund. Real life differs: REITs hedge rates, and the killer is margin calls forcing sales (a spiral this static chart doesn’t show). Returns exclude fees and hedging costs.</div>
+  </div>
+
+  <div class="card">
+    <div class="label">Step by step · How a run goes</div>
+    <p class="how">How to read: tap a step to open the real example.</p>
+    <div class="flow" id="flow3"></div>
+  </div>
+
+  <div class="card">
+    <div class="label">Key actors · the shadow banking zoo</div>
+    <div class="grid g4" id="act3"></div>
+    <div class="detail" id="act3d"></div>
+  </div>
+
+  <div class="card"><div class="label">Remember these 3</div><div class="rem">
+    <div><b>Shadow bank = short funding, longer assets, no safety net.</b> That is the recipe for runs.</div>
+    <div><b>2008 and March 2020 were runs on the shadow system.</b> The Fed reached it through the primary dealers.</div>
+    <div><b>Leverage magnifies small price moves.</b> At 5x, a 10% fall removes 60% of equity.</div>
+  </div></div>
+
+  <div class="card"><div class="label">Common traps</div>
+    <div class="trap"><span class="x">✗ “Shadow banks are illegal or hidden.”</span><span class="v">✓ They are non-banks doing bank-like lending, with lighter rules and no public backstop.</span></div>
+    <div class="trap"><span class="x">✗ “ETFs can’t suffer runs.”</span><span class="v">✓ Share prices can fall far below asset value when the underlying bonds don’t trade (March 2020, <span class="chip book">BOOK</span>).</span></div>
+    <div class="trap"><span class="x">✗ “Money funds are as safe as bank deposits.”</span><span class="v">✓ No FDIC, no discount window. Government funds hold only government paper; prime funds lend to banks too.</span></div>
+    <div class="trap"><span class="x">✗ “The Fed only rescued banks.”</span><span class="v">✓ Through primary dealers and emergency facilities it also backstopped shadow banks (book’s argument, <span class="chip book">BOOK</span>).</span></div>
+  </div>
+
+  <div class="sowhat"><h3>So what? (deal lens) <span class="chip mine">MY ADD</span></h3>
+    <p>Repo, securitization and money-fund funding are the plumbing behind ABS and credit markets. The common failure pattern is the same: leverage plus short-term funding plus a price shock.</p></div>
+</section>
+
+<!-- ============ TAB 4 ============ -->
+<section class="tab" id="t-dollar">
+  <div class="hook"><div class="num">Chapter 4 · The Eurodollar market</div><h2>Dollars outside the US, still tied to the US</h2><p>Eurodollars are dollars held or created outside the US. The Fed doesn’t supervise that system, but it ends up backing it.</p></div>
+
+  <div class="card">
+    <div class="label">Real-life case</div>
+    <h3>BNP Paribas, 2014: a French bank punished in New York</h3>
+    <p>BNP moved dollars for clients in Sudan, Iran and Cuba. Because every dollar payment touches the US banking system, US authorities could hit a non-US bank.</p>
+    <ul class="receipt">
+      <li><span>June 30, 2014: guilty plea; total penalties <span class="chip ok">CHECKED</span></span><b>≈ $8.9B</b></li>
+      <li><span>Value of dollar-clearing for sanctioned parties (about a decade, to 2012) <span class="chip ok">CHECKED</span></span><b>&gt; $190B</b></li>
+      <li><span>Settlement also included a temporary ban on some dollar clearing (NPR/WSJ) <span class="chip ok">CHECKED</span></span><b>—</b></li>
+    </ul>
+    <div class="pull">Lesson: the dollar is a network. Whoever controls the US end can cut you off.</div>
+    <div class="calib">The book rounds the fine to $9B. It also says Iran must sell oil for gold; I could not verify that, so it is left out.</div>
+  </div>
+
+  <div class="card">
+    <div class="label">Interactive 1 · Follow the dollar</div>
+    <p class="how">How to read: numbered nodes are the payment path. Blue nodes are US-regulated. Switch on a sanction and see where the chain breaks.</p>
+    <div class="seg" id="scn"><button data-v="A" class="on">Kazakh bank → US supplier</button><button data-v="B">London bank → Paris bank</button></div>
+    <div class="seg" id="fedTog"><button data-f="0" class="on">Bank holds dollars at a US bank</button><button data-f="1">Bank has its own Fed account</button></div>
+    <div class="seg" id="sancTog"><button data-s="0" class="on">No sanction</button><button data-s="1">Payer is sanctioned</button></div>
+    <div class="pipe" id="pipe"></div>
+    <div class="detail" id="pipeNote"></div>
+    <div class="calib">Paths follow the book’s Kazakhstan and London–Paris examples <span class="chip book">BOOK</span>. In practice, banks screen sanctions at several steps; this shows the structure, not a compliance process.</div>
+  </div>
+
+  <div class="card">
+    <div class="label">Interactive 2 · Why everyone holds dollars, and how big is that today?</div>
+    <p class="how">How to read: bars show the dollar’s share of official foreign-exchange reserves.</p>
+    <div class="bars" id="cofer"></div>
+    <div class="grid g2" id="why4"></div>
+    <div class="calib">Book: “around 60%” <span class="chip book">BOOK</span>. IMF COFER: 56.70% in Q2 2026, from 57.18% in Q1; total FX reserves $13.22T <span class="chip ok">CHECKED</span>. Roughly 71% around 1999–2001 comes from press reports of IMF data <span class="chip ok">CHECKED</span>. Much of recent quarterly moves is exchange-rate valuation, not buying or selling. The IMF also notes gold passed US Treasuries as a share of official reserves in 2025, driven by gold’s price.</div>
+  </div>
+
+  <div class="card">
+    <div class="label">Step by step · From dollar demand to Fed backstop</div>
+    <p class="how">How to read: tap a step to open the example.</p>
+    <div class="flow" id="flow4"></div>
+  </div>
+
+  <div class="card">
+    <div class="label">Key actors</div>
+    <div class="grid g3" id="act4"></div>
+    <div class="detail" id="act4d"></div>
+  </div>
+
+  <div class="card"><div class="label">Remember these 3</div><div class="rem">
+    <div><b>Foreign dollar demand creates offshore dollar banks.</b> Reasons: safety, trade invoicing, cheap funding, deep markets.</div>
+    <div><b>Every dollar links back to the US banking system.</b> That gives the US leverage (sanctions) and responsibility (swap lines).</div>
+    <div><b>Offshore funding is institutional and flighty.</b> In stress the Fed lends through foreign central banks.</div>
+  </div></div>
+
+  <div class="card"><div class="label">Common traps</div>
+    <div class="trap"><span class="x">✗ “Eurodollars are euros.”</span><span class="v">✓ They are US dollars held outside the US. The name dates from Europe in the 1950s.</span></div>
+    <div class="trap"><span class="x">✗ “Offshore dollars are just US money coming back.”</span><span class="v">✓ Book: that was true of the regulatory-arbitrage era. Now most flows are foreign to foreign.</span></div>
+    <div class="trap"><span class="x">✗ “The dollar’s role is permanent.”</span><span class="v">✓ <span class="chip op">OPINION</span> Its reserve share fell from ~71% to ~57%. The book argues no rival has comparable market depth; others disagree.</span></div>
+    <div class="trap"><span class="x">✗ “The Fed lends only to US banks.”</span><span class="v">✓ Via swap lines it lent to foreign central banks in 2008 and 2020. Peak 2020 use: $449B (week of May 27) <span class="chip ok">CHECKED</span>. The book says “almost $500B”.</span></div>
+  </div>
+
+  <div class="sowhat"><h3>So what? (deal lens) <span class="chip mine">MY ADD</span></h3>
+    <p>Offshore dollar bonds are usually issued under English or New York law <span class="chip book">BOOK</span>. That is the international debt capital markets channel, and its cost follows Fed rates and bank funding rules.</p></div>
+</section>
+
+<!-- ============ TEST ============ -->
+<section class="tab" id="t-selftest">
+  <div class="hook"><div class="num">Self-test</div><h2>Four questions, one per chapter</h2><p>Tap an answer for instant feedback.</p></div>
+  <div class="quiz" id="quiz"></div>
+  <div class="card" id="score" style="display:none"></div>
+</section>
+
+<!-- ============ SOURCES ============ -->
+<section class="tab" id="t-sources">
+  <div class="hook"><div class="num">Sources &amp; flags</div><h2>What is checked, what is not</h2></div>
+  <div class="flagbox"><b>Flags</b>
+    <ul>
+      <li>Everything marked BOOK is from the text of the book (data up to about 2020) and was not independently re-checked.</li>
+      <li>Typo in the book: currency “$20 trillion”; corrected above to ≈$2.4T.</li>
+      <li>Dated claims: “Fed can’t sustainably hit 2%”, reserves levels, the dollar’s 60% share, 24 primary dealers. For primary dealers I could not read the current count on the NY Fed page.</li>
+      <li>The CBDC section is the author’s opinion.</li>
+      <li>Swap lines: book “almost $500B”; BIS and Yale say $449B peak, drawn by central banks.</li>
+      <li>FDIC $250k: only secondary consumer guides were readable; confirm at fdic.gov.</li>
+      <li>Not verified and not used: Iran selling oil for gold; the book’s offshore totals ($13T non-bank borrowing, $10T offshore banking in 2018); the $400B dealer repo borrowing in 2020; Sept 2019 repo spike figures.</li>
+    </ul>
+  </div>
+  <div class="card"><div class="label">Sources</div><ul class="src">
+    <li>Wang, J. <i>Central Banking 101</i> (project file; text version).</li>
+    <li>Federal Reserve, H.4.1 (Sept 17, 2026): <a href="https://www.federalreserve.gov/releases/h41/20260917/h41.pdf" target="_blank" rel="noopener">federalreserve.gov</a></li>
+    <li>FRED, Currency in Circulation (weekly average): <a href="https://fred.stlouisfed.org/series/WCURCIR" target="_blank" rel="noopener">fred.stlouisfed.org/series/WCURCIR</a></li>
+    <li>IMF COFER data brief, Sept 30, 2026: <a href="https://data.imf.org/en/news/imf%20data%20brief%20september%2030" target="_blank" rel="noopener">data.imf.org</a></li>
+    <li>IMF COFER data brief, July 1, 2026 (gold vs Treasuries): <a href="https://data.imf.org/en/news/imf%20data%20brief%20july%20" target="_blank" rel="noopener">data.imf.org</a></li>
+    <li>Federal Reserve, Monetary Policy Report, June 2020: <a href="https://www.federalreserve.gov/monetarypolicy/2020-06-mpr-part2.htm" target="_blank" rel="noopener">federalreserve.gov</a></li>
+    <li>NY Fed, operating policy statement, Mar 15, 2020: <a href="https://www.newyorkfed.org/markets/opolicy/operating_policy_200315" target="_blank" rel="noopener">newyorkfed.org</a></li>
+    <li>NY Fed Staff Report 1070 (dealer balance sheets): <a href="https://www.newyorkfed.org/medialibrary/media/research/staff_reports/sr1070.pdf" target="_blank" rel="noopener">newyorkfed.org</a></li>
+    <li>CNBC, Mar 28, 2023 (SVB withdrawals): <a href="https://www.cnbc.com/2023/03/28/svb-customers-tried-to-pull-nearly-all-deposits-in-two-days-barr-says.html" target="_blank" rel="noopener">cnbc.com</a></li>
+    <li>Yale SOM case, Silicon Valley Bank: <a href="https://cases.som.yale.edu/silicon-valley-bank" target="_blank" rel="noopener">cases.som.yale.edu</a></li>
+    <li>ANI/Tribune, Sept 2026 (review of SVB supervision): <a href="https://www.tribuneindia.com/news/business/fed-review-finds-supervisory-delays-contributed-to-silicon-valley-bank-failure/" target="_blank" rel="noopener">tribuneindia.com</a></li>
+    <li>Fed discussion paper on money fund run, 2008: <a href="https://fedinprint.org/item/fednls/86810" target="_blank" rel="noopener">fedinprint.org</a></li>
+    <li>The Reserve, press release, Sept 16, 2008 (SEC exhibit): <a href="https://SEC.gov/spotlight/reserve_primary_fund_investors/osnato_declaration_exhibit_14.pdf" target="_blank" rel="noopener">sec.gov</a></li>
+    <li>Dechert via JD Supra, BNP Paribas plea: <a href="https://www.jdsupra.com/legalnews/bnp-paribas-agrees-to-record-penalty-for-88017/" target="_blank" rel="noopener">jdsupra.com</a></li>
+    <li>NPR, June 30, 2014, BNP Paribas: <a href="https://www.npr.org/sections/thetwo-way/2014/06/30/327074923/bnp-paribas-agrees-to-pay-8-83-billion-in-sanctions-probe" target="_blank" rel="noopener">npr.org</a></li>
+    <li>BIS Bulletin 27 (July 2020), swap lines: <a href="https://www.bis.org/publ/bisbull27.pdf" target="_blank" rel="noopener">bis.org</a></li>
+    <li>Yale Program on Financial Stability, swap lines 2020: <a href="https://newbagehot.yale.edu/node/355" target="_blank" rel="noopener">newbagehot.yale.edu</a></li>
+  </ul></div>
+  <footer>Study aid, not investment advice. Capsules 2 (Markets, Ch. 5–7) and 3 (Fed watching, Ch. 8–9) follow.</footer>
+</section>
+</div>
+
+<script>
+(function(){
+"use strict";
+var $=function(s,el){return (el||document).querySelector(s)};
+var $$=function(s,el){return Array.prototype.slice.call((el||document).querySelectorAll(s))};
+var fmt=function(n,d){return Number(n).toFixed(d==null?1:d)};
+/* edge-safe meter marker: label flips alignment near the ends so it never clips */
+function mk(pos,color,text,low){
+  var st=pos<14?"left:0;transform:none;":(pos>86?"left:auto;right:0;transform:none;":"");
+  return '<div class="mk'+(low?' low':'')+'" style="left:'+pos+'%;color:'+color+'"><span style="'+st+'">'+text+'</span></div>';
+}
+
+
+/* ---------- tabs with plain-hash routing ---------- */
+var TABS=[["money","1 · Types of money"],["creators","2 · Money creators"],["shadow","3 · Shadow banks"],["dollar","4 · Eurodollars"],["selftest","Self-test"],["sources","Sources & flags"]];
+var tabsEl=$("#tabs");
+TABS.forEach(function(t){
+  var b=document.createElement("button");
+  b.setAttribute("role","tab");b.dataset.t=t[0];b.textContent=t[1];
+  b.addEventListener("click",function(){show(t[0],true)});
+  tabsEl.appendChild(b);
+});
+function show(name,push){
+  if(!TABS.some(function(t){return t[0]===name}))name="money";
+  $$(".tab").forEach(function(s){s.classList.toggle("on",s.id==="t-"+name)});
+  $$("#tabs button").forEach(function(b){b.setAttribute("aria-selected",String(b.dataset.t===name))});
+  if(push&&location.hash.slice(1)!==name){try{location.hash=name}catch(e){}}
+  window.scrollTo(0,0);
+}
+window.addEventListener("hashchange",function(){show(location.hash.slice(1),false)});
+
+/* ---------- generic builders ---------- */
+function makeFlow(id,steps){
+  var c=$(id);
+  steps.forEach(function(s,i){
+    var b=document.createElement("button");
+    b.className="step";b.setAttribute("aria-expanded","false");
+    b.innerHTML='<span class="n">'+(i+1)+'</span><span><b>'+s.t+'</b><span class="ex"><br>Example: '+s.ex+'</span></span>';
+    b.addEventListener("click",function(){
+      var open=b.getAttribute("aria-expanded")==="true";
+      $$(".step",c).forEach(function(x){x.setAttribute("aria-expanded","false")});
+      b.setAttribute("aria-expanded",String(!open));
+    });
+    c.appendChild(b);
+  });
+}
+function makeCards(id,detailId,items){
+  var c=$(id),d=$(detailId);
+  function sel(i){
+    $$(".pick",c).forEach(function(b,j){b.setAttribute("aria-pressed",String(i===j))});
+    var it=items[i];
+    d.innerHTML="<b>"+it.name+"</b><ul>"+it.lines.map(function(l){return "<li>"+l+"</li>"}).join("")+"</ul>";
+  }
+  items.forEach(function(it,i){
+    var b=document.createElement("button");
+    b.className="pick";b.setAttribute("aria-pressed","false");
+    b.innerHTML=it.name+"<small>"+it.sub+"</small>";
+    b.addEventListener("click",function(){sel(i)});
+    c.appendChild(b);
+  });
+  sel(0);
+}
+
+/* ---------- TAB 1 ---------- */
+var MONEY=[
+ {k:"cur",name:"Currency",sub:"Paper and coins",rows:[["Issued by","The Fed (US government)"],["Who holds it","Anyone"],["Interest","None"],["$100 = $100?","Yes, always"],["Risk","Lowest. It sits outside the financial system, so it works even if you’re cut off. Research cited in the book suggests most $100 bills are held abroad."]]},
+ {k:"res",name:"Reserves",sub:"Banks’ money at the Fed",rows:[["Issued by","Only the Fed"],["Who holds it","Commercial banks, plus the US Treasury and a few others"],["Interest","Yes: the Fed pays interest on reserves"],["$100 = $100?","Yes"],["Risk","None. They never leave the Fed; they just move between accounts when banks pay each other."]]},
+ {k:"dep",name:"Deposits",sub:"Your bank balance",rows:[["Issued by","Commercial banks, created when they lend or buy assets"],["Who holds it","Anyone"],["Interest","Little on retail; market rates on large wholesale deposits"],["$100 = $100?","Yes, if the bank survives"],["Risk","Bank failure. FDIC covers $250k per depositor, per bank, per category."]]},
+ {k:"tre",name:"Treasuries",sub:"Interest-paying money",rows:[["Issued by","US Treasury"],["Who holds it","Anyone. For big investors it is their money."],["Interest","Yes"],["$100 = $100?","No: the price moves, more for longer maturities"],["Risk","No credit risk (book), but price risk if sold before maturity"]]}
+];
+(function(){
+  var c=$("#moneyPick"),d=$("#moneyDetail");
+  function sel(i){
+    $$(".pick",c).forEach(function(b,j){b.setAttribute("aria-pressed",String(i===j))});
+    var m=MONEY[i];
+    d.innerHTML='<dl class="kv">'+m.rows.map(function(r){return "<dt>"+r[0]+"</dt><dd>"+r[1]+"</dd>"}).join("")+"</dl>";
+  }
+  MONEY.forEach(function(m,i){
+    var b=document.createElement("button");
+    b.className="pick m-"+m.k;b.setAttribute("aria-pressed","false");
+    b.innerHTML="<b>"+m.name+"</b><small>"+m.sub+"</small>";
+    b.addEventListener("click",function(){sel(i)});
+    c.appendChild(b);
+  });
+  sel(0);
+})();
+
+/* QE T-accounts */
+(function(){
+  var seller="bank";
+  var r=$("#qeR"),amt=$("#qeAmt"),grid=$("#qeGrid"),sum=$("#qeSum");
+  function ta(title,assets,liabs){
+    function li(a){return a.map(function(x){return '<div class="'+(x[0]>0?"up":"dn")+'">'+(x[0]>0?"+":"−")+"$"+x[1]+"B "+x[2]+"</div>"}).join("")||"<div>—</div>"}
+    return '<div class="ta"><h4>'+title+'</h4><div class="cols"><div><small>Assets</small>'+li(assets)+'</div><div><small>Liabilities</small>'+li(liabs)+"</div></div></div>";
+  }
+  function render(){
+    var x=+r.value;amt.textContent="$"+x+"B";
+    var h="";
+    h+=ta("The Fed",[[1,x,"Treasuries"]],[[1,x,"Reserves"]]);
+    if(seller==="bank"){
+      h+=ta("Commercial bank (the seller)",[[-1,x,"Treasuries"],[1,x,"Reserves"]],[]);
+      sum.innerHTML="<b>What moved:</b> reserves ▲ +$"+x+"B · deposits ► unchanged · Treasuries held by the public ▼ −$"+x+"B. The bank swapped one asset for another.";
+    }else{
+      h+=ta("Commercial bank (the middleman)",[[1,x,"Reserves"]],[[1,x,"Deposits (corporation)"]]);
+      h+=ta("Corporation (the seller)",[[-1,x,"Treasuries"],[1,x,"Deposits"]],[]);
+      sum.innerHTML="<b>What moved:</b> reserves ▲ +$"+x+"B · deposits ▲ +$"+x+"B · Treasuries held by the public ▼ −$"+x+"B. A nonbank can’t hold reserves, so its bank gets them and credits a new deposit.";
+    }
+    grid.innerHTML=h;
+  }
+  r.addEventListener("input",render);
+  $$("#qeSeller button").forEach(function(b){b.addEventListener("click",function(){
+    seller=b.dataset.s;$$("#qeSeller button").forEach(function(x){x.classList.toggle("on",x===b)});render();
+  })});
+  render();
+})();
+
+makeFlow("#flow1",[
+ {t:"Treasury issues $100 of bonds; an investor swaps $100 of deposits for them.",ex:"A pension fund buys $100 of new Treasury bills with its bank deposit."},
+ {t:"The investor’s bank sends $100 of reserves to the Treasury’s account at the Fed.",ex:"Reserves leave the banking system and sit in the Treasury’s account."},
+ {t:"Treasury spends the $100; the reserves flow back to banks.",ex:"A Medicare payment to a doctor: the doctor’s bank gets $100 of reserves and credits $100 of deposits."},
+ {t:"Net result: same deposits and reserves, $100 more Treasuries outstanding.",ex:"The pension fund can later sell the bills for deposits, or pledge them to buy other assets."}
+]);
+makeCards("#act1","#act1d",[
+ {name:"Households",sub:"Deposits, FDIC-covered",lines:["Hold most money as bank deposits.","$250,000 deposit insurance makes deposits risk-free for most people."]},
+ {name:"Big investors",sub:"Treasuries",lines:["Too big for FDIC cover and not eligible for reserves.","Hold Treasuries, then sell or pledge them for deposits when they need to pay."]},
+ {name:"Commercial banks",sub:"Reserves + currency",lines:["Settle payments with each other in reserves.","Can swap reserves for currency by calling the Fed."]},
+ {name:"Foreign central banks",sub:"Foreign Repo pool",lines:["Can park dollars at the NY Fed in a repo-style pool instead of holding reserves.","Book: about $265B in Jan 2020 <span class=\"chip book\">BOOK</span>."]}
+]);
+
+/* ---------- TAB 2: stress test ---------- */
+(function(){
+  var sEq=$("#sEq"),sLiq=$("#sLiq"),sLoss=$("#sLoss"),sOut=$("#sOut");
+  function render(){
+    var E=+sEq.value,L=+sLiq.value,lossP=+sLoss.value,outP=+sOut.value;
+    var D=100-E,N=100-L,lossAmt=N*lossP/100,outAmt=D*outP/100;
+    var Eafter=E-lossAmt,solvent=Eafter>0,liquid=L>=outAmt;
+    $("#vEq").textContent=fmt(E)+"%";$("#vLiq").textContent=fmt(L,0)+"%";
+    $("#vLoss").textContent=fmt(lossP)+"%";$("#vOut").textContent=fmt(outP,0)+"%";
+    var eaten=Math.min(E,lossAmt),over=Math.max(0,lossAmt-E);
+    var loansAfter=N-lossAmt;
+    function seg(cls,h,title){return h>0.0001?'<div class="seg-b '+cls+'" style="height:'+(h*2)+'px" title="'+title+'"></div>':""}
+    $("#bs").innerHTML=
+      '<div class="col"><div class="t">Assets</div><div class="stack" style="height:200px">'+
+        seg("s-loss",lossAmt,"Loss")+seg("s-loan",loansAfter,"Loans & securities")+seg("s-liq",L,"Liquid assets")+'</div></div>'+
+      '<div class="col"><div class="t">Funding</div><div class="stack" style="height:200px">'+
+        seg("s-loss",over,"Loss borne by depositors")+seg("s-dep",D-over,"Deposits")+seg("s-loss",eaten,"Equity eaten")+seg("s-eq",Math.max(0,E-lossAmt),"Equity left")+'</div></div>';
+    /* meters */
+    var thr=E/N*100, maxX=20;
+    var thrPos=Math.min(100,thr/maxX*100), curPos=Math.min(100,lossP/maxX*100);
+    $("#m1").innerHTML='<div class="rail"></div><div class="zone" style="left:'+thrPos+'%;right:0"></div>'+
+      mk(thrPos,"var(--loss)","Equity gone at "+(thr>maxX?">20":fmt(thr))+"%",false)+
+      mk(curPos,"var(--accent)","Your loss "+fmt(lossP)+"%",true)+
+      '<div class="ends"><span>0%</span><span>20% loss on loans &amp; securities</span></div>';
+    var maxL=40,liqPos=L/maxL*100,outPos=Math.min(100,outAmt/maxL*100);
+    $("#m2").innerHTML='<div class="rail"></div><div class="zone" style="left:'+liqPos+'%;right:0"></div>'+
+      mk(liqPos,"var(--res)","Liquid assets "+fmt(L,0),false)+
+      mk(outPos,liquid?"var(--gain)":"var(--loss)","Withdrawals "+fmt(outAmt),true)+
+      '<div class="ends"><span>0</span><span>$40 per $100 of assets</span></div>';
+    var st=$("#status"),txt,cls;
+    if(solvent&&liquid){txt="Solvent and liquid: a boring bank.";cls="g"}
+    else if(solvent){txt="Solvent but illiquid: a healthy bank that can still die in a run. It needs repo, FHLB or discount-window funding.";cls="a"}
+    else if(liquid){txt="Insolvent but still paying, for now. Depositors will notice.";cls="a"}
+    else{txt="Insolvent and illiquid: failure.";cls="r"}
+    st.className="badge "+cls;st.textContent=txt;
+    $("#keyt").innerHTML=
+      "<div><span><i class=\"sw s-liq\"></i>Liquid assets</span><b>$"+fmt(L)+"</b></div>"+
+      "<div><span><i class=\"sw s-loan\"></i>Loans &amp; securities (before loss)</span><b>$"+fmt(N)+"</b></div>"+
+      "<div><span><i class=\"sw s-loss\"></i>Loss</span><b>−$"+fmt(lossAmt)+"</b></div>"+
+      "<div><span><i class=\"sw s-dep\"></i>Deposits</span><b>$"+fmt(D)+"</b></div>"+
+      "<div><span><i class=\"sw s-eq\"></i>Equity after loss</span><b>"+(Eafter<0?"−$"+fmt(-Eafter):"$"+fmt(Eafter))+"</b></div>"+
+      "<div><span>Withdrawals vs liquid assets</span><b>$"+fmt(outAmt)+" vs $"+fmt(L)+"</b></div>";
+  }
+  [sEq,sLiq,sLoss,sOut].forEach(function(s){s.addEventListener("input",render)});
+  var P={normal:[5,10,0,2],loss:[5,10,6,2],run:[6,10,7,25]};
+  $$("#presets button").forEach(function(b){b.addEventListener("click",function(){
+    var p=P[b.dataset.p];sEq.value=p[0];sLiq.value=p[1];sLoss.value=p[2];sOut.value=p[3];render();
+  })});
+  render();
+})();
+
+/* Alpha / Zed */
+(function(){
+  var n=2,res=0.5;
+  var body=$("#azBody");
+  function render(){
+    var h="";
+    if(n===1){
+      h+='<div class="detail"><b>One bank in the world.</b><br>1) Alpha lends John $1M: loan +$1M, John’s deposit +$1M.<br>2) John pays Tim: Alpha just moves $1M from John’s account to Tim’s.<br>3) No reserves move, so <b>no liquidity problem exists</b>.</div>';
+    }else{
+      var short=Math.max(0,1-res);
+      h+='<div class="ctrl"><label><span>Alpha’s reserves before the payment</span><b>$'+fmt(res)+'M</b></label><input type="range" id="azR" min="0" max="2" step="0.1" value="'+res+'"></div>';
+      var posNeed=50, posHave=Math.min(100,res/2*100);
+      h+='<div class="meter"><div class="rail"></div><div class="zone" style="left:'+posNeed+'%;right:0;background:var(--gain-soft);border-color:var(--gain)"></div>'+
+         mk(posNeed,"var(--loss)","Needed to pay Tim: $1M",false)+
+         mk(posHave,short>0?"var(--loss)":"var(--gain)","Alpha has $"+fmt(res)+"M",true)+
+         '<div class="ends"><span>$0</span><span>$2M</span></div></div>';
+      h+='<div class="detail"><b>Two banks.</b> John banks at Alpha, Tim at Zed.<br>1) Alpha lends John $1M (loan +$1M, deposit +$1M).<br>2) John pays Tim: Alpha must send <span class="dn">−$1M reserves</span> to Zed; Zed credits Tim <span class="up">+$1M deposit</span>.<br>';
+      if(short>0){h+='3) <span class="dn">Alpha is short by $'+fmt(short)+'M.</span> It borrows reserves from Zed or another lender; as a last resort, the Fed’s discount window (with stigma).</div>';}
+      else{h+='3) <span class="up">Alpha has enough reserves.</span> Payment settles; no borrowing needed.</div>';}
+    }
+    body.innerHTML=h;
+    var r=$("#azR");if(r)r.addEventListener("input",function(){res=+r.value;render();var x=$("#azR");if(x)x.focus()});
+  }
+  $$("#azSeg button").forEach(function(b){b.addEventListener("click",function(){
+    n=+b.dataset.n;$$("#azSeg button").forEach(function(x){x.classList.toggle("on",x===b)});render();
+  })});
+  render();
+})();
+
+makeFlow("#flow2",[
+ {t:"Bank checks the borrower and approves a loan.",ex:"John the farmer asks Alpha Bank for $1M to buy lumber; Alpha reviews his finances."},
+ {t:"Bank types in a deposit: loan asset +, deposit liability +.",ex:"John logs in and sees $1M. Nobody else’s deposits were touched."},
+ {t:"The borrower pays someone, often at another bank.",ex:"John sends $1M to Tim the lumberjack, who banks at Zed."},
+ {t:"Banks settle in reserves; a short bank borrows them.",ex:"Alpha sends $1M of reserves to Zed. If it lacks them: Zed or the market first, discount window last."},
+ {t:"When the loan is repaid, the deposit disappears.",ex:"Book: deposits are created by loans and destroyed when loans are repaid."}
+]);
+makeCards("#act2","#act2d",[
+ {name:"The Fed",sub:"Creates reserves",lines:["Backed by the assets it buys or lends against.","Constraint: none obvious. The book says the BoJ bought assets worth over 100% of Japan’s GDP without visible crisis <span class=\"chip book\">BOOK</span>.","Open Markets Desk: runs QE and gathers market intelligence from primary dealers.","Debate: models say QE lowers rates and helps inflation; the book says QE alone didn’t lift inflation (to ~2020)."]},
+ {name:"Commercial banks",sub:"Create deposits",lines:["Backed by loans. License to create money; earn the spread between assets and liabilities.","Constraints: regulation (e.g. a 20x leverage ratio) and finding profitable borrowers.","Retail deposits are cheap and sticky; wholesale deposits are rate-sensitive and flighty.","Two problems to solve: solvency and liquidity."]},
+ {name:"The Treasury",sub:"Creates securities",lines:["Backed by confidence in the US government, not by assets.","Congress sets the deficit; Treasury only chooses how to fund it.","Mix of short vs long debt shapes the yield curve.","Surprise needs go to bills: the $2.2T CARES package was funded mostly with $1.5T of bills <span class=\"chip book\">BOOK</span>."]}
+]);
+
+/* ---------- TAB 3 ---------- */
+(function(){
+  var sL=$("#sL"),sS=$("#sS"),svg=$("#lev"),out=$("#levOut");
+  var X0=60,X1=610,Y0=290,Y1=20,XM=15;
+  function X(s){return X0+s/XM*(X1-X0)}
+  function Y(v){return Y0-v/100*(Y0-Y1)}
+  function eq(L,s){return Math.max(0,100-s*(1+L))}
+  function render(){
+    var L=+sL.value,s=+sS.value;
+    $("#vL").textContent=fmt(L)+"x";$("#vS").textContent=fmt(s,2)+"%";
+    var g="";
+    [0,25,50,75,100].forEach(function(v){
+      g+='<line class="gl" x1="'+X0+'" x2="'+X1+'" y1="'+Y(v)+'" y2="'+Y(v)+'"/><text class="mut" x="'+(X0-8)+'" y="'+(Y(v)+4)+'" text-anchor="end" font-size="12">'+v+'</text>';
+    });
+    [0,5,10,15].forEach(function(v){
+      g+='<line class="gl" x1="'+X(v)+'" x2="'+X(v)+'" y1="'+Y0+'" y2="'+(Y0+5)+'"/><text class="mut" x="'+X(v)+'" y="'+(Y0+20)+'" text-anchor="middle" font-size="12">'+v+'%</text>';
+    });
+    g+='<text class="mut" x="'+((X0+X1)/2)+'" y="326" text-anchor="middle" font-size="12.5">Fall in asset prices</text>';
+    g+='<text class="mut" transform="translate(16,'+((Y0+Y1)/2)+') rotate(-90)" text-anchor="middle" font-size="12.5">Owners’ equity left (start = 100)</text>';
+    [0,2,5,8].forEach(function(l){
+      var wipe=100/(1+l),pts=[[0,100]];
+      if(wipe<XM){pts.push([wipe,0],[XM,0])}else{pts.push([XM,eq(l,XM)])}
+      var d=pts.map(function(p,i){return (i?"L":"M")+X(p[0]).toFixed(1)+" "+Y(p[1]).toFixed(1)}).join(" ");
+      g+='<path d="'+d+'" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="4 3" opacity=".8"/>';
+      var ey=Y(eq(l,XM));
+      g+='<text class="mut" x="'+(X1+6)+'" y="'+(ey+4)+'" font-size="12">'+l+'x</text>';
+    });
+    var wipeL=100/(1+L),pts2=[[0,100]];
+    if(wipeL<XM){pts2.push([wipeL,0],[XM,0])}else{pts2.push([XM,eq(L,XM)])}
+    g+='<path d="'+pts2.map(function(p,i){return (i?"L":"M")+X(p[0]).toFixed(1)+" "+Y(p[1]).toFixed(1)}).join(" ")+'" fill="none" stroke="var(--accent)" stroke-width="3.5"/>';
+    var e=eq(L,s),cx=X(s),cy=Y(e);
+    g+='<line x1="'+cx+'" x2="'+cx+'" y1="'+cy+'" y2="'+Y0+'" stroke="var(--accent)" stroke-dasharray="3 3"/>';
+    g+='<circle cx="'+cx+'" cy="'+cy+'" r="8" fill="'+(e<=0?"var(--loss)":"var(--accent)")+'" stroke="var(--surface)" stroke-width="2"/>';
+    var lx=cx>430?cx-14:cx+14,anc=cx>430?"end":"start",ly=Math.min(Math.max(cy-12,Y1+12),Y0-24);
+    g+='<text x="'+lx+'" y="'+ly+'" text-anchor="'+anc+'" font-size="13.5" font-weight="700">'+fmt(e,0)+' left</text>';
+    svg.innerHTML=g;
+    var roe=2.5+L*(2.5-0.3);
+    out.innerHTML="At <b>"+fmt(L)+"x</b> leverage the carry is about <b>"+fmt(roe)+"%</b> a year on equity (2.5% asset yield, 0.3% repo cost). A <b>"+fmt(s,2)+"%</b> price fall leaves <b class=\""+(e<=0?"dn":e<50?"dn":"up")+"\">"+fmt(e,0)+"%</b> of equity"+(L>0?"; equity is wiped out at a <b>"+fmt(100/(1+L))+"%</b> fall":"")+".";
+  }
+  sL.addEventListener("input",render);sS.addEventListener("input",render);render();
+})();
+
+makeFlow("#flow3",[
+ {t:"Lenders stop rolling over short-term funding.",ex:"Bear Stearns, March 2008: investors refused to renew repo loans after its subprime losses <span class=\"chip book\">BOOK</span>."},
+ {t:"The borrower is forced to sell assets quickly.",ex:"March 2020: mortgage REITs sold Agency MBS into a market with almost no buyers <span class=\"chip book\">BOOK</span>."},
+ {t:"Prices fall, collateral is worth less, lenders ask for more.",ex:"Dealers demanded extra collateral from mREITs; investors lost over half their capital <span class=\"chip book\">BOOK</span>."},
+ {t:"Panic spreads to others funded the same way.",ex:"After Reserve Primary broke the buck, about $200B left prime money funds in two days <span class=\"chip ok\">CHECKED</span>."},
+ {t:"The government steps in as lender of last resort.",ex:"Sept 19, 2008: Treasury guarantee for money funds plus a Fed facility <span class=\"chip ok\">CHECKED</span>. The Fed reaches non-banks through primary dealers <span class=\"chip book\">BOOK</span>."}
+]);
+makeCards("#act3","#act3d",[
+ {name:"Primary dealers",sub:"The Fed’s counterparties",lines:["Trade directly with the Fed; like a supermarket for bonds, buying and holding inventory.","Funded by overnight repo renewed daily.","Breaks when lenders won’t roll (Bear Stearns, 2008).","The book counts 24 primary dealers at its time; the current number I could not verify."]},
+ {name:"Money market funds",sub:"Deposit lookalikes",lines:["Invest in paper of up to 397 days; withdrawals next business day.","No FDIC and no discount window.","Government funds hold government paper only; prime funds lend to banks too.","Broke in Sept 2008 (Reserve Primary)."]},
+ {name:"ETFs",sub:"Liquid wrapper",lines:["Shares trade like stocks; arbitrage keeps price near the basket’s value.","Weak spot: corporate-bond and small-cap holdings trade rarely.","March 2020: many ETFs traded well below asset value <span class=\"chip book\">BOOK</span>."]},
+ {name:"Mortgage REITs",sub:"Leveraged MBS carry",lines:["Buy 15–30-year Agency MBS with one-month repo.","Leverage up to ~8x <span class=\"chip book\">BOOK</span>.","Agency MBS are government-guaranteed, so the risk is funding, not default.","March 2020: forced sales."]},
+ {name:"Private funds",sub:"Hedge funds, PE",lines:["Investors usually can’t withdraw on demand, so little run risk.","Exception: leveraged, short-funded strategies.","Treasury cash-futures basis trade: tiny spread, leverage up to 100x <span class=\"chip book\">BOOK</span>; it unwound at a loss in March 2020."]},
+ {name:"Securitization",sub:"Loans into bonds",lines:["A pool of loans funds bonds paid in a waterfall: senior first, owners last.","Banks shifted from holding loans to earning fees on originating them, so they cared less if loans soured.","Aug 2007: asset-backed commercial paper fell from $1.163T to $0.976T in a month <span class=\"chip book\">BOOK</span>."]},
+ {name:"Federal Home Loan Banks",sub:"Government-backed shadow bank",lines:["11 regional co-ops owned by member banks, implicit government backing.","Borrow short from government money funds, lend to banks against collateral; ~$1T in assets <span class=\"chip book\">BOOK</span>.","Banks turn to FHLBs before the discount window (stigma).","Biggest borrowers are now the biggest banks, due to Basel III <span class=\"chip book\">BOOK</span>."]}
+]);
+
+/* ---------- TAB 4 ---------- */
+(function(){
+  var scn="A",fed=0,sanc=0;
+  var pipe=$("#pipe"),note=$("#pipeNote");
+  function path(){
+    if(scn==="A"&&!fed)return[
+      {n:"Kazakh company",d:"Asks to pay a US supplier $1,000",t:"p"},
+      {n:"KBank",d:"Debits the company; KBank’s dollars sit as deposits at a US bank",t:"p"},
+      {n:"KBank’s US bank",d:"Moves $1,000 of reserves to UBank",t:"us"},
+      {n:"The Fed",d:"Reserve accounts: one down $1,000, UBank up $1,000",t:"fed"},
+      {n:"UBank",d:"Credits the supplier",t:"us"},
+      {n:"US supplier",d:"Receives $1,000",t:"p"}];
+    if(scn==="A")return[
+      {n:"Kazakh company",d:"Asks to pay a US supplier $1,000",t:"p"},
+      {n:"KBank",d:"Has its own Fed account (costly, so only larger banks do)",t:"p"},
+      {n:"The Fed",d:"KBank’s reserves down $1,000, UBank’s up $1,000",t:"fed"},
+      {n:"UBank",d:"Credits the supplier",t:"us"},
+      {n:"US supplier",d:"Receives $1,000",t:"p"}];
+    return[
+      {n:"Foreign payer",d:"Pays a supplier whose bank is in Paris",t:"p"},
+      {n:"London bank",d:"Holds its dollars at a US commercial bank",t:"p"},
+      {n:"London bank’s US bank",d:"Wires $1,000 to the Paris bank’s Fed account",t:"us"},
+      {n:"The Fed",d:"Reserves move between the two banks’ accounts",t:"fed"},
+      {n:"Paris bank",d:"Opened a Fed account; credits its client",t:"p"},
+      {n:"Supplier in Paris",d:"Receives $1,000",t:"p"}];
+  }
+  function render(){
+    var P=path(),block=-1;
+    if(sanc){for(var i=0;i<P.length;i++){if(P[i].t==="us"||P[i].t==="fed"){block=i;break}}}
+    pipe.innerHTML=P.map(function(x,i){
+      var cls="node"+(x.t==="us"?" us":x.t==="fed"?" fed":"")+(i===block?" blocked":"")+(block>=0&&i>block?" dead":"");
+      var tag=x.t==="us"?'<span class="tag">US-REGULATED</span>':x.t==="fed"?'<span class="tag">SETTLES HERE</span>':"";
+      if(i===block)tag='<span class="tag">✕ BLOCKED</span>';
+      return '<div class="'+cls+'"><div class="dot">'+(i===block?"✕":i+1)+'</div><div><b>'+x.n+tag+'</b><span>'+x.d+'</span></div></div>';
+    }).join("");
+    note.innerHTML=sanc
+      ? "<b>Sanctioned payer:</b> the first US-regulated step refuses. Everything after it never happens. A bank that processes it anyway risks losing dollar access, which is the leverage behind the BNP penalty."
+      : "<b>Normal flow:</b> even when both parties are foreign, final settlement runs through reserves at the Fed. That is why “offshore” dollars are never fully offshore.";
+    $$("#fedTog button").forEach(function(b){b.disabled=(scn==="B");b.style.opacity=(scn==="B")?".45":"1"});
+  }
+  $$("#scn button").forEach(function(b){b.addEventListener("click",function(){scn=b.dataset.v;$$("#scn button").forEach(function(x){x.classList.toggle("on",x===b)});render()})});
+  $$("#fedTog button").forEach(function(b){b.addEventListener("click",function(){fed=+b.dataset.f;$$("#fedTog button").forEach(function(x){x.classList.toggle("on",x===b)});render()})});
+  $$("#sancTog button").forEach(function(b){b.addEventListener("click",function(){sanc=+b.dataset.s;$$("#sancTog button").forEach(function(x){x.classList.toggle("on",x===b)});render()})});
+  render();
+})();
+
+(function(){
+  var rows=[["~1999–2001",71,"≈71%"],["Book (≈2020)",60,"~60%"],["IMF Q1 2026",57.18,"57.2%"],["IMF Q2 2026",56.70,"56.7%"]];
+  $("#cofer").innerHTML=rows.map(function(r){return '<div class="bar"><span>'+r[0]+'</span><div class="track"><div class="fill" style="width:'+r[1]+'%"></div></div><b>'+r[2]+'</b></div>'}).join("");
+  var why=[["Safety","Seen as the global safe haven; backed by the biggest economy and a stable central bank (book)."],["Trade","About 50% of trade is invoiced in dollars, even between non-Americans (book)."],["Cheaper funding","When Fed rates are low, dollar loans can beat local-currency loans, especially in emerging markets (book)."],["Deep markets","Treasuries and dollar bond markets can absorb huge sums; no other market is as deep (book)."]];
+  $("#why4").innerHTML=why.map(function(w){return '<div class="detail"><b>'+w[0]+'</b><br>'+w[1]+'</div>'}).join("");
+})();
+
+makeFlow("#flow4",[
+ {t:"The world wants dollars.",ex:"Japan pays Saudi Arabia for oil in dollars; a Korean firm pays a Thai supplier in dollars <span class=\"chip book\">BOOK</span>."},
+ {t:"Offshore banks create dollar deposits when they lend.",ex:"A Japanese bank makes a dollar loan to a Korean company <span class=\"chip book\">BOOK</span>."},
+ {t:"They fund themselves with institutional money.",ex:"CDs and FX swaps, not insured retail deposits. A small foreign bank may hold dollars at a US bank as its “reserves” <span class=\"chip book\">BOOK</span>."},
+ {t:"In stress, institutions pull funding and dollar rates spike.",ex:"Small banks without a Fed account scramble in wholesale markets <span class=\"chip book\">BOOK</span>."},
+ {t:"The Fed lends dollars to foreign central banks, who relay them.",ex:"2020 swap lines peaked at $449B in the week of May 27, mostly ECB and Bank of Japan <span class=\"chip ok\">CHECKED</span>."}
+]);
+makeCards("#act4","#act4d",[
+ {name:"The Fed",sub:"“World’s central bank”",lines:["Sets dollar rates that foreign borrowers face.","Lender of last resort through swap lines in 2008 and 2020.","Low Fed rates can pull emerging-market borrowers into dollar loans, weakening their own central banks’ control (book)."]},
+ {name:"Foreign banks",sub:"Large vs small",lines:["Large ones have US branches and Fed accounts, so they can reach the discount window.","Small ones hold dollars at US banks: a fractional system built on a fractional system <span class=\"chip book\">BOOK</span>.","Basel III and FDIC fee changes pushed institutional cash toward foreign banks <span class=\"chip book\">BOOK</span>."]},
+ {name:"US authorities",sub:"The sanctions lever",lines:["All dollar payments end up touching the US banking system.","Cutting a bank off from dollars is, as the book puts it, a death sentence for it.","BNP Paribas, 2014: ≈$8.9B penalties <span class=\"chip ok\">CHECKED</span>."]}
+]);
+
+/* ---------- quiz ---------- */
+(function(){
+  var Q=[
+   {q:"Ch. 1 · The Fed buys $1B of Treasuries from a corporation (not a bank). What happens?",o:["Reserves +$1B and deposits +$1B","Reserves unchanged, deposits +$1B","The corporation’s bank can now lend out the $1B of reserves","Deposits unchanged, reserves +$1B"],a:0,why:"The Fed pays with reserves to the corporation’s bank, which credits the corporation a new $1B deposit. Reserves can’t leave the Fed, so they can’t be “lent out”. The last option describes a bank seller."},
+   {q:"Ch. 2 · A bank has $100 of assets, $5 of equity and $95 of deposits. Its assets lose 6%. What is true?",o:["It is fine if it holds enough reserves","It is insolvent: the $6 loss exceeds $5 of equity","The Fed must add reserves to fix it","FDIC insurance covers the equity"],a:1,why:"Solvency is about assets vs debts. A $6 loss wipes out $5 of equity and eats into depositors’ money. Reserves help liquidity, not solvency."},
+   {q:"Ch. 3 · A mortgage REIT runs 5x leverage on Agency MBS funded by one-month repo. What is the main danger?",o:["Borrowers defaulting on the mortgages","Lenders demanding more collateral or not rolling, forcing fire sales","The Fed paying too little interest","Having to pay FDIC premiums"],a:1,why:"Agency MBS are government-guaranteed, so default isn’t the issue. The risk is funding: if repo lenders pull back, the fund must sell into falling prices (March 2020)."},
+   {q:"Ch. 4 · A Korean firm pays a Thai firm in dollars through two non-US banks. Which statement is right?",o:["It stays entirely outside the US system","It is a euro transaction","Settlement still runs through the US banking system, so the US can block it","Only the Fed in Seoul can approve it"],a:2,why:"Dollar settlement ends up in reserves at the Fed via US banks. That is the lever behind sanctions and the BNP Paribas case."}
+  ];
+  var c=$("#quiz"),score=$("#score"),done=0,right=0;
+  Q.forEach(function(q){
+    var d=document.createElement("div");d.className="q";
+    d.innerHTML="<b>"+q.q+"</b>";
+    q.o.forEach(function(t,i){
+      var b=document.createElement("button");b.className="opt";b.textContent=t;
+      b.addEventListener("click",function(){
+        if(d.classList.contains("done"))return;
+        d.classList.add("done");done++;
+        var kids=$$(".opt",d);
+        kids[q.a].classList.add("right");
+        if(i===q.a)right++;else b.classList.add("wrong");
+        w.innerHTML=(i===q.a?"<b>Correct.</b> ":"<b>Not quite.</b> ")+q.why;
+        if(done===Q.length){score.style.display="block";score.innerHTML="<b>Score: "+right+" / "+Q.length+"</b><br>Reload the page to try again."}
+      });
+      d.appendChild(b);
+    });
+    var w=document.createElement("div");w.className="why";d.appendChild(w);
+    c.appendChild(d);
+  });
+})();
+
+show(location.hash.slice(1),false);
+})();
+</script>
+</body>
+</html>

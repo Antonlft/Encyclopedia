@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tariffs, in one washing machine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF1F4; --surface:#FFFFFF; --ink:#13202E; --muted:#556474; --line:#D3DAE2;
+  --gain:#1E8657; --gain-soft:rgba(30,134,87,.16);
+  --loss:#C2362B; --loss-soft:rgba(194,54,43,.12);
+  --gov:#2A5BC4; --gov-soft:rgba(42,91,196,.18);
+  --waste:#8C96A1; --waste-soft:rgba(140,150,161,.35);
+  --accent:#E2701B;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1720; --surface:#17212C; --ink:#E8EDF2; --muted:#9AA7B4; --line:#2B3846;
+    --gain:#3DBE82; --gain-soft:rgba(61,190,130,.20);
+    --loss:#EF6A5E; --loss-soft:rgba(239,106,94,.14);
+    --gov:#7DA2F2; --gov-soft:rgba(125,162,242,.22);
+    --waste:#7C8692; --waste-soft:rgba(124,134,146,.40);
+    --accent:#F08A3C; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1720; --surface:#17212C; --ink:#E8EDF2; --muted:#9AA7B4; --line:#2B3846;
+  --gain:#3DBE82; --gain-soft:rgba(61,190,130,.20);
+  --loss:#EF6A5E; --loss-soft:rgba(239,106,94,.14);
+  --gov:#7DA2F2; --gov-soft:rgba(125,162,242,.22);
+  --waste:#7C8692; --waste-soft:rgba(124,134,146,.40);
+  --accent:#F08A3C; color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Archivo",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-variation-settings:"wdth" 100;font-size:17px;line-height:1.5}
+main{max-width:760px;margin:0 auto;padding:28px 20px 64px}
+h1,h2,h3{font-variation-settings:"wdth" 125;line-height:1.05;margin:0}
+h1{font-size:clamp(2.3rem,7vw,3.6rem);font-weight:900;letter-spacing:-.01em}
+h2{font-size:clamp(1.5rem,4.2vw,2rem);font-weight:850;margin-bottom:6px}
+h3{font-size:1.05rem;font-weight:800}
+p{margin:0}
+.lede{color:var(--muted);margin-bottom:18px;max-width:62ch}
+section{padding:44px 0 8px;border-top:2px solid var(--ink)}
+section:first-of-type{border-top:0;padding-top:8px}
+a{color:inherit;text-decoration-thickness:1px;text-underline-offset:3px}
+small,.small{font-size:.82rem;color:var(--muted)}
+.def{color:var(--muted);font-size:.92rem}
+.def b{color:var(--ink)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:4px}
+.gain{color:var(--gain)} .loss{color:var(--loss)} .gov{color:var(--gov)} .waste{color:var(--waste)}
+
+/* HERO */
+.hero{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end;margin-bottom:22px}
+.tag{position:relative;background:var(--accent);color:#1b1006;padding:18px 22px 16px 40px;clip-path:polygon(22px 0,100% 0,100% 100%,22px 100%,0 50%);transform:rotate(-4deg);min-width:190px}
+.tag::before{content:"";position:absolute;left:12px;top:50%;width:10px;height:10px;margin-top:-5px;border-radius:50%;background:var(--bg)}
+.tag .big{font-variation-settings:"wdth" 125;font-weight:900;font-size:3rem;line-height:1}
+.tag .sm{font-size:.82rem;font-weight:600;line-height:1.3;max-width:20ch}
+.hook{font-size:1.2rem;font-weight:500;max-width:56ch;margin-bottom:22px}
+.now{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--line);background:var(--surface)}
+.now div{padding:14px;border-left:1px solid var(--line)}
+.now div:first-child{border-left:0}
+.now strong{display:block;font-variation-settings:"wdth" 115;font-size:1.35rem;font-weight:850}
+.now span{font-size:.85rem;color:var(--muted);line-height:1.35;display:block}
+.why{margin-top:18px;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--line);padding:16px}
+.why .side{text-align:center;font-weight:700;font-size:.9rem}
+.why .side .em{font-size:1.8rem;display:block}
+.why .mid{text-align:center;font-size:.92rem}
+.why .arrows{font-size:1.3rem;letter-spacing:.2em;color:var(--muted)}
+
+/* CASE */
+.timeline{list-style:none;margin:16px 0 0;padding:0;border-left:3px solid var(--ink)}
+.timeline li{position:relative;padding:0 0 18px 20px}
+.timeline li::before{content:"";position:absolute;left:-8px;top:6px;width:13px;height:13px;background:var(--bg);border:3px solid var(--ink);border-radius:50%}
+.timeline .when{font-weight:800;font-variation-settings:"wdth" 115}
+.receipt{margin-top:8px;background:var(--surface);border:1px solid var(--line);padding:16px 18px;display:grid;grid-template-columns:1fr auto;gap:6px 18px;font-variant-numeric:tabular-nums}
+.receipt .r{text-align:right;font-weight:800}
+.receipt .total{border-top:2px dashed var(--line);padding-top:8px;margin-top:4px}
+.concept{margin-top:18px;padding:16px 18px;background:var(--ink);color:var(--bg)}
+.concept b{color:var(--accent)}
+
+/* SIMULATOR */
+.sim{background:var(--surface);border:2px solid var(--ink);padding:18px}
+.controls{display:grid;gap:14px;margin-bottom:12px}
+.slider-row{display:flex;align-items:center;gap:14px}
+.slider-row label{font-weight:700;white-space:nowrap}
+.rate{font-variation-settings:"wdth" 125;font-weight:900;font-size:2rem;min-width:3.4ch;text-align:right;color:var(--accent)}
+input[type=range]{flex:1;accent-color:var(--accent);height:28px}
+.ticks{display:flex;justify-content:space-between;font-size:.75rem;color:var(--muted);margin:-8px 0 0 0}
+.pills{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.pills .lab{font-weight:700;font-size:.92rem;margin-right:4px}
+.pill{border:1.5px solid var(--line);background:transparent;padding:6px 12px;border-radius:999px;font-size:.88rem;cursor:pointer}
+.pill[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chart-wrap{overflow-x:auto}
+svg.chart{width:100%;min-width:480px;height:auto;display:block}
+svg.chart text{font-family:"Archivo",system-ui,sans-serif;fill:var(--ink)}
+.readout{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:10px}
+.cell{padding:10px 12px;border:1px solid var(--line);border-top-width:4px}
+.cell .k{font-size:.82rem;color:var(--muted);line-height:1.25}
+.cell .v{font-variation-settings:"wdth" 115;font-weight:850;font-size:1.45rem;font-variant-numeric:tabular-nums}
+.cell.price{border-top-color:var(--accent)}
+.cell.c-loss{border-top-color:var(--loss)} .cell.c-loss .v{color:var(--loss)}
+.cell.c-gain{border-top-color:var(--gain)} .cell.c-gain .v{color:var(--gain)}
+.cell.c-gov{border-top-color:var(--gov)} .cell.c-gov .v{color:var(--gov)}
+.cell.c-waste{border-top-color:var(--waste)} .cell.c-waste .v{color:var(--waste)}
+.net{grid-column:1/-1;display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:10px 12px;background:var(--bg);font-weight:700}
+.net .v{font-variant-numeric:tabular-nums;font-weight:850}
+.note{margin-top:10px;font-size:.82rem;color:var(--muted)}
+
+/* FLOW */
+.chain{display:flex;flex-wrap:wrap;gap:6px;align-items:stretch;margin-top:14px}
+.step{flex:1 1 120px;text-align:left;border:2px solid var(--ink);background:var(--surface);padding:10px;cursor:pointer;position:relative;min-height:74px}
+.step .n{font-variation-settings:"wdth" 125;font-weight:900;font-size:1.3rem;line-height:1}
+.step .t{font-weight:700;font-size:.9rem;line-height:1.2;display:block;margin-top:4px}
+.step[aria-expanded="true"]{background:var(--ink);color:var(--bg)}
+.panel{margin-top:10px;border-left:4px solid var(--accent);background:var(--surface);padding:14px 16px;min-height:96px}
+.panel .line{font-weight:600;margin-bottom:8px}
+.panel .ex{font-size:.94rem}
+.panel .ex b{color:var(--accent)}
+
+/* WINNERS / LOSERS */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin-top:14px}
+.card{text-align:left;background:var(--surface);border:1px solid var(--line);padding:14px;cursor:pointer;display:flex;flex-direction:column;gap:8px;min-height:120px}
+.card .head{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.card .who{font-weight:800;font-variation-settings:"wdth" 110}
+.stamp{font-variation-settings:"wdth" 125;font-weight:900;font-size:.8rem;padding:3px 8px;border:2px solid currentColor;transform:rotate(-6deg)}
+.stamp.w{color:var(--gain)} .stamp.l{color:var(--loss)} .stamp.m{color:var(--waste)}
+.card .hint{font-size:.82rem;color:var(--muted)}
+.card .back{display:none;font-size:.92rem}
+.card[aria-expanded="true"] .back{display:block}
+.card[aria-expanded="true"] .hint{display:none}
+.card.w[aria-expanded="true"]{box-shadow:inset 4px 0 0 var(--gain)}
+.card.l[aria-expanded="true"]{box-shadow:inset 4px 0 0 var(--loss)}
+.card.m[aria-expanded="true"]{box-shadow:inset 4px 0 0 var(--waste)}
+
+/* REMEMBER */
+.keep{display:grid;gap:12px;margin-top:14px}
+.keep div{background:var(--ink);color:var(--bg);padding:16px 18px}
+.keep strong{display:block;font-variation-settings:"wdth" 120;font-size:1.15rem;font-weight:850;color:var(--accent);margin-bottom:2px}
+
+/* TRAPS */
+.traps{display:grid;gap:10px;margin-top:14px}
+.trap{text-align:left;background:var(--surface);border:1px solid var(--line);padding:14px 16px;cursor:pointer}
+.trap .myth{font-weight:700;display:flex;gap:10px;align-items:baseline}
+.trap .myth::before{content:"✕";color:var(--loss);font-weight:900}
+.trap .fact{display:none;margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);font-size:.94rem}
+.trap .fact::before{content:"✓ ";color:var(--gain);font-weight:900}
+.trap[aria-expanded="true"] .fact{display:block}
+.trap[aria-expanded="true"] .myth{text-decoration:line-through;text-decoration-color:var(--loss);color:var(--muted)}
+.trap .tap{font-size:.78rem;color:var(--muted);margin-left:auto;white-space:nowrap}
+.trap[aria-expanded="true"] .tap{display:none}
+
+/* QUIZ */
+.q{background:var(--surface);border:1px solid var(--line);padding:16px;margin-top:12px}
+.q .qt{font-weight:700;margin-bottom:10px}
+.opts{display:grid;gap:8px}
+.opt{text-align:left;border:1.5px solid var(--line);background:transparent;padding:10px 12px;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--ink)}
+.opt:disabled{cursor:default}
+.opt.right{border-color:var(--gain);background:var(--gain-soft);font-weight:700}
+.opt.wrong{border-color:var(--loss);background:var(--loss-soft)}
+.fb{display:none;margin-top:10px;font-size:.94rem}
+.fb.show{display:block}
+.score{margin-top:14px;font-weight:800;font-variation-settings:"wdth" 115;font-size:1.15rem}
+
+.sources{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);font-size:.8rem;color:var(--muted)}
+.sources ul{padding-left:18px;margin:6px 0 0}
+.sources li{margin-bottom:3px}
+
+@media (max-width:600px){
+  body{font-size:16px}
+  .hero{grid-template-columns:1fr}
+  .tag{justify-self:start;transform:rotate(-3deg)}
+  .now{grid-template-columns:1fr}
+  .now div{border-left:0;border-top:1px solid var(--line)}
+  .now div:first-child{border-top:0}
+  .why{grid-template-columns:1fr 1fr;}
+  .why .mid{grid-column:1/-1;order:3}
+  .chain{flex-direction:column}
+  .step{min-height:0;display:flex;gap:10px;align-items:center}
+  .step .t{margin-top:0}
+}
+@media (prefers-reduced-motion:no-preference){
+  .tag{animation:drop .7s cubic-bezier(.2,.9,.3,1.3) both}
+  @keyframes drop{from{opacity:0;transform:translateY(-24px) rotate(-14deg)}to{opacity:1;transform:rotate(-4deg)}}
+}
+</style>
+</head>
+<body>
+<main>
+
+<!-- 1. HOOK -->
+<section id="hook">
+  <div class="hero">
+    <h1>Tariffs, in one washing machine</h1>
+    <div class="tag" aria-label="Plus 86 dollars on a washer">
+      <div class="big">+$86</div>
+      <div class="sm">added to the median US washer by the 2018 tariff</div>
+    </div>
+  </div>
+  <p class="hook">A tariff is a tax on imports. It's collected at <em>your</em> border, mostly from <em>your</em> buyers, and it's been the biggest economic policy story of 2025–26.</p>
+
+  <div class="now" role="list">
+    <div role="listitem"><strong>2.3%</strong><span>US average effective tariff, Jan 2025</span></div>
+    <div role="listitem"><strong>20 Feb 2026</strong><span>Supreme Court strikes down Trump's emergency (IEEPA) tariffs</span></div>
+    <div role="listitem"><strong>6.7%</strong><span>Effective rate, July 2026. Still ~3× the start of 2025</span></div>
+  </div>
+  <p class="small" style="margin-top:6px">Source: Penn Wharton Budget Model. Other trackers (Yale, GTA) show higher figures because they measure differently. Treat as estimates.</p>
+
+  <div class="why" aria-label="Why countries trade">
+    <div class="side"><span class="em" aria-hidden="true">🫘</span>US farms<br>soybeans</div>
+    <div class="mid"><span class="arrows" aria-hidden="true">⇄</span><br><b>Why trade at all?</b> Each side makes what it's <i>relatively</i> best at, then swaps. Economists call it <b>comparative advantage</b>.</div>
+    <div class="side"><span class="em" aria-hidden="true">🧺</span>Samsung &amp; LG<br>build washers</div>
+  </div>
+  <p class="small" style="margin-top:6px">US soybean exports: ~$21bn in 2017. Hold that number. It comes back.</p>
+</section>
+
+<!-- 2. CASE -->
+<section id="case">
+  <h2>The story: Whirlpool vs. the world</h2>
+  <p class="lede">A real case with real receipts. Then we pull out the idea.</p>
+  <ol class="timeline">
+    <li><span class="when">2017</span><br>Whirlpool, America's big washer maker, complains: Samsung and LG are flooding the US with cheap machines.</li>
+    <li><span class="when">Jan 2018</span><br>US imposes a <b>safeguard tariff</b> (= emergency tax to shield an industry): 20% on imported washers, 50% above a quota.</li>
+    <li><span class="when">2018</span><br>Washer prices jump <b class="loss">+12%</b>. Dryers, which weren't taxed, rise too: <b class="loss">+$92</b>. Sellers just tagged along.</li>
+    <li><span class="when">The bill</span><br>Economists from the Fed and UChicago add it up:</li>
+  </ol>
+  <div class="receipt" aria-label="Cost receipt">
+    <span>Extra paid by US shoppers, per year</span><span class="r loss">$1.5bn</span>
+    <span>Tariff money collected by the Treasury</span><span class="r gov">$82M</span>
+    <span>New US jobs (incl. Samsung's South Carolina plant)</span><span class="r gain">~1,800</span>
+    <span class="total"><b>Cost to consumers per job created</b></span><span class="r total loss">~$815,000</span>
+  </div>
+  <p class="small" style="margin-top:6px">Flaaen, Hortaçsu &amp; Tintelnot (2019). Contested: Whirlpool argued the true cost was ~$15–22k per job.</p>
+  <div class="concept"><b>The concept:</b> a tariff raises the price of imports. Local makers raise theirs too, because they can. Shoppers pay; a few producers and workers gain; the government collects a slice.</div>
+</section>
+
+<!-- 3. SIMULATOR -->
+<section id="sim">
+  <h2>Run your own tariff</h2>
+  <p class="lede">A simplified US washer market: ~10M sold a year, world price $700. Drag the rate and watch who wins and who pays.</p>
+  <div class="sim">
+    <div class="controls">
+      <div>
+        <div class="slider-row">
+          <label for="rate">Tariff rate</label>
+          <input id="rate" type="range" min="0" max="60" step="1" value="20" aria-describedby="rateHelp">
+          <output id="rateOut" class="rate" for="rate">20%</output>
+        </div>
+        <div class="ticks" id="rateHelp" aria-hidden="true"><span>0%</span><span>20% (2018 washer rate)</span><span>50% (above quota)</span><span>60%</span></div>
+      </div>
+      <div class="pills" role="group" aria-label="Who absorbs the tariff">
+        <span class="lab">Who eats the cost?</span>
+        <button class="pill" data-s="0.1" aria-pressed="true">Reality: US buyers ~90%</button>
+        <button class="pill" data-s="0">US buyers 100%</button>
+        <button class="pill" data-s="0.5">Foreigners pay half</button>
+      </div>
+    </div>
+
+    <div class="chart-wrap">
+    <svg class="chart" id="chart" viewBox="0 0 560 380" role="img" aria-labelledby="chartTitle">
+      <title id="chartTitle">Supply and demand diagram of the US washer market showing the effects of a tariff</title>
+      <defs>
+        <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+          <rect width="6" height="6" fill="var(--gov-soft)"/><line x1="0" y1="0" x2="0" y2="6" stroke="var(--gov)" stroke-width="2"/>
+        </pattern>
+      </defs>
+      <!-- axes -->
+      <line x1="50" y1="340" x2="545" y2="340" stroke="var(--ink)" stroke-width="1.5"/>
+      <line x1="50" y1="340" x2="50" y2="14" stroke="var(--ink)" stroke-width="1.5"/>
+      <g id="ticks" font-size="11"></g>
+      <text x="300" y="374" font-size="12" text-anchor="middle" style="fill:var(--muted)">Washers sold per year (millions)</text>
+      <text x="14" y="180" font-size="12" text-anchor="middle" transform="rotate(-90 14 180)" style="fill:var(--muted)">Price per washer</text>
+      <!-- areas -->
+      <polygon id="aPS" fill="var(--gain-soft)" stroke="var(--gain)" stroke-width="1"/>
+      <polygon id="aD1" fill="var(--waste-soft)"/>
+      <rect id="aRevD" fill="var(--gov-soft)"/>
+      <rect id="aRevF" fill="url(#hatch)"/>
+      <polygon id="aD2" fill="var(--waste-soft)"/>
+      <polygon id="aCS" fill="none" stroke="var(--loss)" stroke-width="2.5" stroke-dasharray="6 4"/>
+      <!-- curves -->
+      <line id="dem" stroke="var(--ink)" stroke-width="2.5"/>
+      <line id="sup" stroke="var(--ink)" stroke-width="2.5"/>
+      <line id="pw" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="4 4"/>
+      <line id="pt" stroke="var(--accent)" stroke-width="2.5"/>
+      <line id="pf" stroke="var(--gov)" stroke-width="1.5" stroke-dasharray="2 3"/>
+      <text id="dLab" font-size="13" font-weight="800" text-anchor="end" style="paint-order:stroke;stroke:var(--surface);stroke-width:4px">US demand ↘</text>
+      <text id="sLab" font-size="13" font-weight="800" text-anchor="start" style="paint-order:stroke;stroke:var(--surface);stroke-width:4px">↗ Domestic supply</text>
+      <text id="sLab2" font-size="11" text-anchor="start" style="fill:var(--muted);paint-order:stroke;stroke:var(--surface);stroke-width:4px">(Whirlpool &amp; co.)</text>
+      <text id="pwLab" font-size="11" style="fill:var(--muted)">World price $700</text>
+      <text id="ptLab" font-size="12" font-weight="800" style="fill:var(--accent)"></text>
+      <text id="pfLab" font-size="11" style="fill:var(--gov)"></text>
+      <!-- imports bracket -->
+      <line id="impLine" stroke="var(--ink)" stroke-width="1.5" marker-start="url(#arr)" marker-end="url(#arr)"/>
+      <text id="impLab" font-size="11" font-weight="700" text-anchor="middle"></text>
+      <defs><marker id="arr" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10z" fill="var(--ink)"/></marker></defs>
+    </svg>
+    </div>
+
+    <div class="readout" aria-live="polite">
+      <div class="cell price"><div class="k">US price per washer</div><div class="v" id="oPrice">$826</div></div>
+      <div class="cell c-loss"><div class="k">Consumers lose<br><span class="small">red dashed outline</span></div><div class="v" id="oCS">−$1.2bn</div></div>
+      <div class="cell c-gain"><div class="k">Domestic producers gain<br><span class="small">green area</span></div><div class="v" id="oPS">+$0.5bn</div></div>
+      <div class="cell c-gov"><div class="k">Government collects<br><span class="small" id="oRevF">blue box</span></div><div class="v" id="oRev">+$0.7bn</div></div>
+      <div class="cell c-waste" style="grid-column:1/-1"><div class="k"><b>Deadweight loss</b> (= value that simply vanishes: purchases that no longer happen, and US factories making washers less efficiently than imports)<br><span class="small">grey triangles</span></div><div class="v" id="oDWL">−$0.07bn</div></div>
+      <div class="net"><span>Net for the US as a whole</span><span class="v" id="oNet"></span></div>
+    </div>
+    <p class="note">Stylized model, per year, loosely calibrated to the 2018 case. Real life was messier: Samsung and LG built US plants to dodge the tariff, so actual revenue was only $82M. Try it: the US only comes out ahead at low rates when foreigners eat part of the cost. In 2025 they ate just ~4–10%.</p>
+  </div>
+</section>
+
+<!-- 4. FLOW -->
+<section id="flow">
+  <h2>What happens next</h2>
+  <p class="lede">A tariff is never one move. Tap each step.</p>
+  <div class="chain" role="group" aria-label="Tariff chain reaction">
+    <button class="step" data-i="0" aria-expanded="true" aria-controls="flowPanel"><span class="n">1</span><span class="t">Tariff imposed</span></button>
+    <button class="step" data-i="1" aria-expanded="false" aria-controls="flowPanel"><span class="n">2</span><span class="t">Importer pays</span></button>
+    <button class="step" data-i="2" aria-expanded="false" aria-controls="flowPanel"><span class="n">3</span><span class="t">Price rises</span></button>
+    <button class="step" data-i="3" aria-expanded="false" aria-controls="flowPanel"><span class="n">4</span><span class="t">Retaliation</span></button>
+    <button class="step" data-i="4" aria-expanded="false" aria-controls="flowPanel"><span class="n">5</span><span class="t">Supply chains shift</span></button>
+  </div>
+  <div class="panel" id="flowPanel" aria-live="polite"></div>
+</section>
+
+<!-- 5. WINNERS / LOSERS -->
+<section id="who">
+  <h2>Winners vs. losers</h2>
+  <p class="lede">Tap a card to see the receipt.</p>
+  <div class="cards">
+    <button class="card l" aria-expanded="false"><span class="head"><span class="who">US consumers</span><span class="stamp l">LOSE</span></span><span class="hint">Tap to reveal</span><span class="back">Pay more on imports <i>and</i> on local goods. 2018: +$86 per washer, +$92 per dryer.</span></button>
+    <button class="card w" aria-expanded="false"><span class="head"><span class="who">Domestic producers</span><span class="stamp w">WIN</span></span><span class="hint">Tap to reveal</span><span class="back">Less competition, higher prices. Whirlpool's profit rose in early 2019 on higher prices.</span></button>
+    <button class="card l" aria-expanded="false"><span class="head"><span class="who">US exporters</span><span class="stamp l">LOSE</span></span><span class="hint">Tap to reveal</span><span class="back">They eat the retaliation. US soybean sales to China fell 74% in 2018. Washington paid farmers up to $28bn in aid (2018–19).</span></button>
+    <button class="card w" aria-expanded="false"><span class="head"><span class="who">Government</span><span class="stamp w">WINS*</span></span><span class="hint">Tap to reveal</span><span class="back">Collects revenue, but it's paid by its own citizens. *2026: ~$166bn of IEEPA tariffs ordered refunded after the Supreme Court ruling.</span></button>
+    <button class="card m" aria-expanded="false"><span class="head"><span class="who">Foreign producers</span><span class="stamp m">MIXED</span></span><span class="hint">Tap to reveal</span><span class="back">Lose US sales, but rarely cut prices: they absorbed only ~4% of 2025 US tariffs (Kiel). Rivals win: Brazil's soy farmers took China's orders.</span></button>
+  </div>
+</section>
+
+<!-- 6. REMEMBER -->
+<section id="remember">
+  <h2>Remember these 3</h2>
+  <div class="keep">
+    <div><strong>It's a tax on your own buyers.</strong>Customs bills the importer. In 2025, ~90% of the cost landed on US firms and households (NY Fed).</div>
+    <div><strong>Protection has a price tag.</strong>A few producers gain a lot; millions of shoppers each lose a little. Washers: ~$815k of consumer cost per job.</div>
+    <div><strong>Every tariff has a second act.</strong>Partners retaliate, production reroutes. Soy orders went to Brazil; iPhones to India.</div>
+  </div>
+</section>
+
+<!-- 7. TRAPS -->
+<section id="traps">
+  <h2>Common traps</h2>
+  <p class="lede">Tap each myth to flip it.</p>
+  <div class="traps">
+    <button class="trap" aria-expanded="false"><span class="myth">"The foreign country pays the tariff." <span class="tap">Tap</span></span><span class="fact">The US importer pays US Customs. Kiel (Jan 2026): foreign exporters absorbed ~4% of 2025 tariffs; the rest fell on US buyers.</span></button>
+    <button class="trap" aria-expanded="false"><span class="myth">"Only imported goods get more expensive." <span class="tap">Tap</span></span><span class="fact">Local makers raise prices under the umbrella. 2018: dryers rose ~12% with no tariff on them at all.</span></button>
+    <button class="trap" aria-expanded="false"><span class="myth">"Tariff revenue is free money for the state." <span class="tap">Tap</span></span><span class="fact">It's a transfer from your own consumers, plus waste. Washers: $82M collected vs $1.5bn extra paid by shoppers.</span></button>
+    <button class="trap" aria-expanded="false"><span class="myth">"Tariffs bring the factories home." <span class="tap">Tap</span></span><span class="fact">Often they just move next door. Apple shifted US-bound iPhones to India and most iPads, Macs and AirPods to Vietnam (2025), not to the US.</span></button>
+  </div>
+</section>
+
+<!-- 8. SELF-TEST -->
+<section id="quiz">
+  <h2>Self-test</h2>
+  <p class="lede">Three questions. Instant feedback.</p>
+  <div id="quizBox"></div>
+  <div class="score" id="score" aria-live="polite"></div>
+</section>
+
+<div class="sources">
+  <b>Sources</b>
+  <ul>
+    <li><a href="https://www.aeaweb.org/research/washing-machines-2018-tariffs-effect" target="_blank" rel="noopener">AEA: washing machine tariffs (Flaaen, Hortaçsu, Tintelnot)</a> · <a href="https://www.bnnbloomberg.ca/trump-touts-whirlpool-job-gains-from-tariffs-that-hit-consumers-1.1476618" target="_blank" rel="noopener">Bloomberg: Whirlpool's counter-estimate</a></li>
+    <li><a href="https://sgp.fas.org/crs/row/R45448.pdf" target="_blank" rel="noopener">Congressional Research Service: retaliatory tariffs on US farm exports (2018)</a> · <a href="https://www.axios.com/soybeans-trump-trade-war-china-1c1a37ae-23ea-4b0d-b5e4-e4058138ff04.html" target="_blank" rel="noopener">Axios: soybean exports and farm aid</a></li>
+    <li><a href="https://www.piie.com/blogs/realtime-economics/2026/who-pays-tariffs-insights-recent-research" target="_blank" rel="noopener">PIIE: who pays for tariffs (2026)</a> · <a href="https://www.kielinstitut.de/publications/americas-own-goal-who-pays-the-tariffs-19398/" target="_blank" rel="noopener">Kiel Institute: America's own goal (Jan 2026)</a></li>
+    <li><a href="https://budgetmodel.wharton.upenn.edu/p/2026-09-09-effective-tariff-rates-and-revenues-updated-september-9-2026/" target="_blank" rel="noopener">Penn Wharton: effective tariff rates (Sept 2026)</a> · <a href="https://budgetlab.yale.edu/research/state-us-tariffs-february-20-2026" target="_blank" rel="noopener">Yale Budget Lab: post-Supreme Court tariffs</a></li>
+    <li><a href="https://www.khaleejtimes.com/world/americas/apple-iphones-india-trump-tariffs-china" target="_blank" rel="noopener">AFP: Apple shifts US iPhone supply to India (May 2025)</a></li>
+  </ul>
+</div>
+</main>
+
+<script>
+(function(){
+  /* ---------- SIMULATOR ---------- */
+  const PW=700, QD0=10, B=0.005, QS0=4, D=0.004;      // demand & supply (millions of units, $)
+  const X=q=>50+q/12*490, Y=p=>340-(p-300)/1200*320;
+  const $=id=>document.getElementById(id);
+  let share=0.1;
+
+  // static ticks
+  const tk=$('ticks'); let h='';
+  [0,2,4,6,8,10,12].forEach(q=>{h+=`<line x1="${X(q)}" y1="340" x2="${X(q)}" y2="345" stroke="var(--ink)"/><text x="${X(q)}" y="358" text-anchor="middle" style="fill:var(--muted)">${q}</text>`});
+  [300,700,1100,1500].forEach(p=>{h+=`<line x1="45" y1="${Y(p)}" x2="50" y2="${Y(p)}" stroke="var(--ink)"/><text x="42" y="${Y(p)+4}" text-anchor="end" style="fill:var(--muted)">$${p}</text>`});
+  tk.innerHTML=h;
+  const set=(el,o)=>{for(const k in o) el.setAttribute(k,o[k])};
+  set($('dem'),{x1:X(6),y1:Y(1500),x2:X(12),y2:Y(300)});
+  set($('sup'),{x1:X(2.4),y1:Y(300),x2:X(7.2),y2:Y(1500)});
+  set($('pw'),{x1:50,y1:Y(PW),x2:545,y2:Y(PW)});
+  set($('dLab'),{x:X(6)-8,y:Y(1500)+4});
+  set($('sLab'),{x:X(7.2)+8,y:Y(1500)+4});
+  set($('sLab2'),{x:X(7.2)+8,y:Y(1500)+18});
+
+  const fmt=m=>{const a=Math.abs(m); return a>=1000?'$'+(a/1000).toFixed(2)+'bn':'$'+Math.round(a)+'M'};
+  const pts=a=>a.map(([q,p])=>X(q)+','+Y(p)).join(' ');
+
+  function update(){
+    const t=+$('rate').value/100;
+    $('rateOut').textContent=Math.round(t*100)+'%';
+    const T=PW*t, dP=(1-share)*T, Pd=PW+dP, Pf=PW-share*T;
+    const Qd=QD0-B*dP, Qs=QS0+D*dP, M=Qd-Qs;
+    const cs=dP*(QD0+Qd)/2, ps=dP*(QS0+Qs)/2, rev=T*M, revF=share*T*M, dwl=cs-ps-dP*M, net=ps+rev-cs;
+
+    set($('aPS'),{points:pts([[0,PW],[QS0,PW],[Qs,Pd],[0,Pd]])});
+    set($('aD1'),{points:pts([[QS0,PW],[Qs,PW],[Qs,Pd]])});
+    set($('aD2'),{points:pts([[Qd,Pd],[Qd,PW],[QD0,PW]])});
+    set($('aRevD'),{x:X(Qs),y:Y(Pd),width:X(Qd)-X(Qs),height:Math.max(0,Y(PW)-Y(Pd))});
+    set($('aRevF'),{x:X(Qs),y:Y(PW),width:X(Qd)-X(Qs),height:Math.max(0,Y(Pf)-Y(PW))});
+    set($('aCS'),{points:pts([[0,PW],[QD0,PW],[Qd,Pd],[0,Pd]]),visibility:dP>0?'visible':'hidden'});
+    set($('pt'),{x1:50,y1:Y(Pd),x2:X(Qd)+30,y2:Y(Pd),visibility:t>0?'visible':'hidden'});
+    set($('pf'),{x1:X(Qs),y1:Y(Pf),x2:X(Qd),y2:Y(Pf),visibility:share>0&&t>0?'visible':'hidden'});
+    const ptl=$('ptLab'); ptl.textContent=t>0?`US price $${Math.round(Pd)}`:''; set(ptl,{x:X(Qd)+34,y:Y(Pd)+4});
+    const pfl=$('pfLab'); pfl.textContent=(share>0&&t>0)?`Exporter nets $${Math.round(Pf)}`:''; set(pfl,{x:X(Qd)+6,y:Y(Pf)+12});
+    set($('pwLab'),{x:56,y:Y(PW)+14});
+    const iy=Y(Pd)-14;
+    set($('impLine'),{x1:X(Qs)+2,y1:iy,x2:X(Qd)-2,y2:iy});
+    const il=$('impLab'); il.textContent=`Imports ${M.toFixed(1)}M (was 6.0M)`; set(il,{x:(X(Qs)+X(Qd))/2,y:iy-6});
+
+    $('oPrice').textContent='$'+Math.round(Pd)+(t>0?`  (+$${Math.round(dP)})`:'');
+    $('oCS').textContent=(cs>0?'−':'')+fmt(cs);
+    $('oPS').textContent=(ps>0?'+':'')+fmt(ps);
+    $('oRev').textContent=(rev>0?'+':'')+fmt(rev);
+    $('oRevF').textContent=share>0&&t>0?`of which foreign exporters pay ${fmt(revF)} (hatched)`:'blue box: all paid by US buyers';
+    $('oDWL').textContent=(dwl>0.5?'−':'')+fmt(dwl);
+    const n=$('oNet'); n.textContent=(net>=0.5?'+':net<=-0.5?'−':'')+fmt(net);
+    n.style.color=net>=0.5?'var(--gain)':net<=-0.5?'var(--loss)':'var(--muted)';
+  }
+  $('rate').addEventListener('input',update);
+  document.querySelectorAll('.pill').forEach(b=>b.addEventListener('click',()=>{
+    document.querySelectorAll('.pill').forEach(x=>x.setAttribute('aria-pressed','false'));
+    b.setAttribute('aria-pressed','true'); share=+b.dataset.s; update();
+  }));
+  update();
+
+  /* ---------- FLOW ---------- */
+  const steps=[
+    {line:'A government adds a tax on goods crossing its border.',ex:'<b>Jan 2018:</b> US slaps 20–50% on imported washers. July 2018: 25% on $34bn of Chinese goods, the first shot of the US–China trade war.'},
+    {line:'The company bringing the goods in writes the check to its own customs agency. Not the foreign government.',ex:'<b>2025:</b> 330,000+ US businesses paid ~$166bn in emergency (IEEPA) tariffs. After the Supreme Court ruling, that money is owed back to them, not to China.'},
+    {line:'The importer passes the cost on. Local rivals raise prices too, because they can.',ex:'<b>2018:</b> washers +12% (~$86). Dryers +$92 with zero tariff on them. More than 100% of the tariff reached shoppers.'},
+    {line:'The other side hits back, aiming at politically sensitive exports.',ex:'<b>July 2018:</b> China puts 25% on US soybeans. US soy sales to China fall 74% that year; Brazil takes the orders; Washington pays farmers up to $28bn in aid.'},
+    {line:'Companies move production to dodge the tax, often to a third country rather than home.',ex:'<b>2018:</b> Samsung opens a washer plant in South Carolina. <b>2025:</b> Apple makes most US-bound iPhones in India, and most US iPads, Macs and AirPods in Vietnam.'}
+  ];
+  const panel=$('flowPanel');
+  const showStep=i=>{
+    document.querySelectorAll('.step').forEach(b=>b.setAttribute('aria-expanded',String(+b.dataset.i===i)));
+    panel.innerHTML=`<p class="line">${steps[i].line}</p><p class="ex">${steps[i].ex}</p>`;
+  };
+  document.querySelectorAll('.step').forEach(b=>b.addEventListener('click',()=>showStep(+b.dataset.i)));
+  showStep(0);
+
+  /* ---------- TOGGLES ---------- */
+  document.querySelectorAll('.card,.trap').forEach(b=>b.addEventListener('click',()=>{
+    b.setAttribute('aria-expanded',b.getAttribute('aria-expanded')==='true'?'false':'true');
+  }));
+
+  /* ---------- QUIZ ---------- */
+  const Q=[
+    {q:'The US puts a 25% tariff on a $100 part from China. Who writes the $25 check to US Customs?',
+     o:['The Chinese exporter','The Chinese government','The US company importing the part','The World Trade Organization'],a:2,
+     e:'The importer of record pays customs. Whether it then squeezes the supplier or raises prices is a separate question, and in 2025 it mostly raised prices.'},
+    {q:'After the 2018 washer tariff, what happened to the price of dryers, which were NOT taxed?',
+     o:['Fell, as shoppers skipped buying sets','Stayed flat','Rose about as much as washers (~12%)','Dryers were banned'],a:2,
+     e:'Sellers used the cover of the washer tariff to lift dryer prices too (+$92). Tariffs leak into prices of goods they never touch.'},
+    {q:'China answered US tariffs in 2018 with a 25% tax on US soybeans. Who gained most?',
+     o:['US soybean farmers','Brazilian soybean farmers','US Customs','Chinese pig farmers'],a:1,
+     e:'China switched to Brazil. US soy sales to China fell 74% in 2018, and US taxpayers funded up to $28bn in farm aid. Retaliation rewards third countries.'}
+  ];
+  let answered=0, right=0;
+  const box=$('quizBox');
+  Q.forEach((it,qi)=>{
+    const d=document.createElement('div'); d.className='q';
+    d.innerHTML=`<p class="qt">${qi+1}. ${it.q}</p><div class="opts">${it.o.map((o,oi)=>`<button class="opt" data-oi="${oi}">${o}</button>`).join('')}</div><p class="fb" role="status"></p>`;
+    box.appendChild(d);
+    d.querySelectorAll('.opt').forEach(btn=>btn.addEventListener('click',()=>{
+      const oi=+btn.dataset.oi, ok=oi===it.a;
+      d.querySelectorAll('.opt').forEach(x=>{x.disabled=true; if(+x.dataset.oi===it.a) x.classList.add('right');});
+      if(!ok) btn.classList.add('wrong');
+      const fb=d.querySelector('.fb'); fb.classList.add('show');
+      fb.innerHTML=`<b class="${ok?'gain':'loss'}">${ok?'Correct.':'Not quite.'}</b> ${it.e}`;
+      answered++; if(ok) right++;
+      if(answered===Q.length) $('score').textContent=`Score: ${right}/3. ${right===3?'You get tariffs better than most politicians.':'Scroll up to the simulator and try again.'}`;
+    }));
+  });
+})();
+</script>
+</body>
+</html>
