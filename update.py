@@ -169,7 +169,13 @@ def main():
                    if p.is_file() and p.suffix.lower() in (".html", ".htm")
                    and not any(part.startswith(".") for part in p.relative_to(CAPSULES_DIR).parts))
 
+    # Exact-case paths of the files really in capsules/. GitHub Pages is case-sensitive,
+    # so entries are matched against these strings, not with the (case-insensitive on macOS)
+    # filesystem.
+    scanned = {rel(p) for p in files}
+    scanned_by_lower = {s.lower(): s for s in scanned}
     known_files = {e.get("file") for e in entries if isinstance(e, dict)}
+    known_lower = {str(f).lower() for f in known_files if f}
     used_slugs = {e.get("slug") for e in entries if isinstance(e, dict)}
     warnings = []
     added = []
@@ -178,8 +184,8 @@ def main():
     scans = {}
     for path in files:
         scans[path] = scan_page(path)
-        if rel(path) in known_files:
-            continue
+        if rel(path).lower() in known_lower:
+            continue    # already listed (a case-only mismatch is reported below, not re-added)
         page = scans[path]
         slug = base = slugify(path.stem)
         n = 2
@@ -207,6 +213,7 @@ def main():
 
     # 2. check entries (flag missing files, unfinished or malformed fields)
     flagged = []
+    case_mismatches = []    # (label, real file name)
     output = []
     for i, e in enumerate(entries, 1):
         if not isinstance(e, dict):
@@ -214,10 +221,14 @@ def main():
             continue
         label = e.get("file") or e.get("title") or f"entry #{i}"
         item = dict(e)
-        file_ok = bool(e.get("file")) and (ROOT / e["file"]).is_file()
-        if not file_ok:
-            flagged.append(label)
+        file_field = str(e.get("file") or "")
+        if file_field not in scanned:
             item["_missing"] = True     # only in capsules-data.js, not in capsules.json
+            real = scanned_by_lower.get(file_field.lower())
+            if real:
+                case_mismatches.append((label, real))
+            else:
+                flagged.append(label)
         for field in FIELDS:
             if field not in e:
                 warnings.append(f"{label}: field '{field}' is missing")
@@ -264,11 +275,15 @@ def main():
         print(f"  + added      {e['file']}  (status: draft - fill in the TODO fields)")
     for label in flagged:
         print(f"  ! flagged    {label}  (file not found)")
+    for label, real in case_mismatches:
+        print(f"  ! case       {label}  (capitals differ from the real file {real} - "
+              "this link breaks on the live site; fix \"file\" in capsules.json)")
     for w in warnings:
         print(f"  - warning    {w}")
     print()
     print(f"Summary: {len(files)} capsule file(s), {len(entries)} entr{'y' if len(entries) == 1 else 'ies'} | "
-          f"added {len(added)} | flagged {len(flagged)} | warnings {len(warnings)}")
+          f"added {len(added)} | flagged {len(flagged)} | case mismatches {len(case_mismatches)} | "
+          f"warnings {len(warnings)}")
     print(f"Wrote {rel(JS_FILE)}" + (f" and updated {rel(JSON_FILE)}" if added else ""))
 
 
