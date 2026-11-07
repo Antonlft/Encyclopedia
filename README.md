@@ -1,6 +1,8 @@
-# Capsule Library
+# The Encyclopedia
 
 A small static website that lists my self-contained HTML learning pages ("capsules") and lets me search them. No server, no build step, no dependencies.
+
+**How it's organised:** the home page shows one **collection** per `topic` in `capsules.json` (e.g. "Money & Banking"). To start a new collection, give a capsule a new topic name. Spelling and capitals must match exactly to land in the same collection. Clicking a capsule opens it inside the site, with a bar on top to go back to the home page or the collection.
 
 ## What's in this folder
 

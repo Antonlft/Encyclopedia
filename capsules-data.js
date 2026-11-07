@@ -5,7 +5,7 @@ window.CAPSULES = [
     "title": "Capsule 1 · Money & Banking (Central Banking 101)",
     "slug": "money-and-banking-central-banking-101",
     "file": "capsules/money-and-banking-central-banking-101.html",
-    "topic": "Money & banking",
+    "topic": "Money & Banking",
     "tags": [
       "central banking",
       "Fed",
@@ -24,7 +24,7 @@ window.CAPSULES = [
     "title": "Subsidies, in one electric car",
     "slug": "subsidies-in-one-electric-car",
     "file": "capsules/subsidies-in-one-electric-car.html",
-    "topic": "Trade & industrial policy",
+    "topic": "Trade & Industrial Policy",
     "tags": [
       "subsidies",
       "EV tax credit",
@@ -41,7 +41,7 @@ window.CAPSULES = [
     "title": "Tariffs, in one washing machine",
     "slug": "tariffs-in-one-washing-machine",
     "file": "capsules/tariffs-in-one-washing-machine.html",
-    "topic": "Trade & industrial policy",
+    "topic": "Trade & Industrial Policy",
     "tags": [
       "tariffs",
       "trade war",

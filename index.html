@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Capsule Library</title>
-<meta name="description" content="A searchable library of self-contained learning capsules.">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Encyclopedia</title>
+<meta name="description" content="A personal library of self-contained learning capsules, grouped into collections.">
 <script>
   // Apply a saved theme choice before the page paints (avoids a flash).
   try {
@@ -84,63 +84,81 @@
     color: var(--text);
     font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   }
+  [hidden] { display: none !important; }
+  a { color: inherit; }
+  :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
   .wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
 
+  /* ---------- header ---------- */
   header { padding: 32px 0 8px; }
   .title-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-  h1 { margin: 0; font-size: 1.75rem; line-height: 1.2; letter-spacing: -0.01em; }
+  h1 { margin: 0; font-size: 2rem; line-height: 1.15; letter-spacing: -0.015em; }
+  h1 a { text-decoration: none; }
   .subtitle { margin: 4px 0 0; color: var(--muted); }
-
-  .controls {
-    display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end;
-    padding: 16px 0; margin-top: 8px;
-  }
-  .field { display: flex; flex-direction: column; gap: 4px; }
-  .field.grow { flex: 1 1 260px; }
-  .field label { font-size: .8125rem; font-weight: 600; color: var(--muted); }
-  input[type="search"], select {
-    font: inherit; color: var(--text); background: var(--surface);
-    border: 1px solid var(--border); border-radius: 8px;
-    padding: 9px 12px; min-height: 42px; width: 100%;
-  }
-  select { min-width: 180px; }
-  .check {
-    display: inline-flex; align-items: center; gap: 8px; min-height: 42px;
-    font-size: .9375rem; cursor: pointer; user-select: none;
-  }
-  .check input { width: 18px; height: 18px; margin: 0; accent-color: var(--accent); }
   button.theme {
     font: inherit; font-size: .875rem; color: var(--text); background: var(--surface);
     border: 1px solid var(--border); border-radius: 999px; padding: 6px 14px; cursor: pointer;
     white-space: nowrap;
   }
-  :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 
+  .crumbs { margin: 0 0 4px; font-size: .9375rem; color: var(--muted); }
+  .crumbs a { color: var(--accent); text-decoration: none; }
+  .crumbs a:hover { text-decoration: underline; }
+
+  .controls {
+    display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end;
+    padding: 16px 0; margin-top: 8px;
+  }
+  .field { display: flex; flex-direction: column; gap: 4px; flex: 1 1 260px; }
+  .field label { font-size: .8125rem; font-weight: 600; color: var(--muted); }
+  input[type="search"] {
+    font: inherit; color: var(--text); background: var(--surface);
+    border: 1px solid var(--border); border-radius: 8px;
+    padding: 9px 12px; min-height: 42px; width: 100%;
+  }
+  .check {
+    display: inline-flex; align-items: center; gap: 8px; min-height: 42px;
+    font-size: .9375rem; cursor: pointer; user-select: none;
+  }
+  .check input { width: 18px; height: 18px; margin: 0; accent-color: var(--accent); }
+
+  h2.view-title { margin: 8px 0 4px; font-size: 1.5rem; line-height: 1.2; }
   .status { color: var(--muted); font-size: .9375rem; margin: 0 0 12px; }
 
+  /* ---------- grids ---------- */
   .grid {
     display: grid; gap: 16px;
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
     padding-bottom: 48px;
   }
-  .card {
+  .card, .coll {
     position: relative;
     display: flex; flex-direction: column; gap: 10px;
     background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
     padding: 18px; box-shadow: var(--shadow);
     overflow-wrap: anywhere;
   }
-  .card:hover { border-color: var(--accent); }
-  .card:focus-within { border-color: var(--accent); }
+  .card:hover, .card:focus-within, .coll:hover, .coll:focus-within { border-color: var(--accent); }
+  .card h3, .coll h3 { margin: 0; font-size: 1.125rem; line-height: 1.35; }
+  .card h3 a, .coll h3 a { color: var(--text); text-decoration: none; }
+  .card h3 a::after, .coll h3 a::after { content: ""; position: absolute; inset: 0; border-radius: 12px; } /* whole tile clickable */
+  .card h3 a:hover, .coll h3 a:hover { text-decoration: underline; }
+
+  /* collection tiles */
+  .coll { padding: 22px 20px; gap: 12px; }
+  .coll .folder { font-size: .75rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--accent); }
+  .coll h3 { font-size: 1.375rem; line-height: 1.25; }
+  .coll .count { margin: 0; color: var(--muted); font-size: .9375rem; }
+  .coll ul { margin: 0; padding: 0 0 0 18px; font-size: .9375rem; }
+  .coll li { margin: 2px 0; }
+  .coll .more { color: var(--muted); list-style: none; margin-left: -18px; }
+
+  /* capsule cards */
   .topic {
     align-self: flex-start;
     font-size: .75rem; font-weight: 600; letter-spacing: .03em; text-transform: uppercase;
     color: var(--accent); background: var(--accent-soft); border-radius: 6px; padding: 2px 8px;
   }
-  .card h2 { margin: 0; font-size: 1.125rem; line-height: 1.35; }
-  .card h2 a { color: var(--text); text-decoration: none; }
-  .card h2 a::after { content: ""; position: absolute; inset: 0; border-radius: 12px; } /* whole card clickable */
-  .card h2 a:hover { text-decoration: underline; }
   .summary { margin: 0; color: var(--muted); font-size: .9375rem; }
   .tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
   .tags li { font-size: .8125rem; background: var(--chip); border-radius: 999px; padding: 2px 10px; }
@@ -151,10 +169,7 @@
   .dates dt { color: var(--muted); }
   .dates dd { margin: 0; font-variant-numeric: tabular-nums; }
   .flags { display: flex; flex-wrap: wrap; gap: 6px; }
-  .flag {
-    font-size: .8125rem; font-weight: 600; border-radius: 6px; padding: 3px 8px;
-    border: 1px solid transparent;
-  }
+  .flag { font-size: .8125rem; font-weight: 600; border-radius: 6px; padding: 3px 8px; border: 1px solid transparent; }
   .flag.stale { color: var(--warn-text); background: var(--warn-bg); border-color: var(--warn-border); }
   .flag.draft { color: var(--draft-text); background: var(--draft-bg); }
   .flag.missing { color: var(--bad-text); background: var(--bad-bg); }
@@ -165,38 +180,85 @@
   }
   .empty code { background: var(--chip); padding: 1px 6px; border-radius: 4px; }
 
+  /* ---------- reader (capsule shown inside the site) ---------- */
+  body.reading { overflow: hidden; }
+  .reader { position: fixed; inset: 0; display: flex; flex-direction: column; background: var(--bg); }
+  .bar {
+    flex: none; display: flex; align-items: center; gap: 10px;
+    padding: 8px 16px; padding-top: max(8px, env(safe-area-inset-top));
+    padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right));
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    min-height: 52px;
+  }
+  .bar .home { font-weight: 700; font-size: 1.0625rem; text-decoration: none; white-space: nowrap; letter-spacing: -0.01em; }
+  .bar .home:hover { color: var(--accent); }
+  .bar .path { flex: 1 1 auto; min-width: 0; display: flex; align-items: center; gap: 8px; font-size: .9375rem; color: var(--muted); }
+  .bar .path .sep { flex: none; }
+  .bar .path a { color: var(--accent); text-decoration: none; white-space: nowrap; }
+  .bar .path a:hover { text-decoration: underline; }
+  .bar .path .now { overflow-wrap: anywhere; line-height: 1.3; }
+  .bar .actions { flex: none; display: flex; align-items: center; gap: 8px; }
+  .bar .ext { font-size: .875rem; color: var(--muted); text-decoration: none; white-space: nowrap; }
+  .bar .ext:hover { color: var(--accent); }
+  .frame { flex: 1 1 auto; width: 100%; border: 0; display: block; background: var(--bg); }
+  .reader .missing-msg { margin: 48px 16px; }
+
+  @media (max-width: 720px) {
+    .bar .path .now, .bar .path .sep2 { display: none; }   /* phone: show collection only */
+    .bar .ext .long { display: none; }
+  }
   @media (max-width: 560px) {
     header { padding-top: 20px; }
-    h1 { font-size: 1.5rem; }
+    h1 { font-size: 1.625rem; }
     .controls > .field, .controls > .check { flex: 1 1 100%; }
-    select { min-width: 0; }
+    .bar { gap: 8px; padding-left: 12px; padding-right: 12px; }
+    .bar .theme { display: none; }            /* phone: theme button stays on the home page */
+    .bar .path { gap: 6px; }
+    .bar .path a { white-space: normal; line-height: 1.25; }
   }
 </style>
 </head>
 <body>
-  <div class="wrap">
+  <!-- Library: home (collections) and collection pages -->
+  <div class="wrap" id="library">
     <header>
       <div class="title-row">
-        <h1>Capsule Library</h1>
-        <button type="button" class="theme" id="theme" aria-label="Change colour theme">Theme: Auto</button>
+        <h1><a href="#/">The Encyclopedia</a></h1>
+        <button type="button" class="theme" data-theme-btn aria-label="Change colour theme">Theme: Auto</button>
       </div>
-      <p class="subtitle">Self-contained learning pages. Click a card to open it.</p>
+      <p class="subtitle">Self-contained learning capsules, grouped into collections.</p>
     </header>
 
     <div class="controls" role="search">
-      <div class="field grow">
-        <label for="q">Search</label>
-        <input type="search" id="q" placeholder="Title, topic, tag or summary" autocomplete="off">
-      </div>
       <div class="field">
-        <label for="topic">Topic</label>
-        <select id="topic"><option value="">All topics</option></select>
+        <label for="q" id="qLabel">Search all capsules</label>
+        <input type="search" id="q" placeholder="Title, topic, tag or summary" autocomplete="off">
       </div>
       <label class="check"><input type="checkbox" id="drafts"> Show drafts</label>
     </div>
 
+    <nav class="crumbs" id="crumbs" aria-label="Breadcrumb" hidden></nav>
+    <h2 class="view-title" id="viewTitle" hidden></h2>
     <p class="status" id="status" aria-live="polite"></p>
     <main class="grid" id="grid"></main>
+  </div>
+
+  <!-- Reader: one capsule inside the site -->
+  <div class="reader" id="reader" hidden>
+    <div class="bar">
+      <a class="home" href="#/">The Encyclopedia</a>
+      <div class="path">
+        <span class="sep" aria-hidden="true">›</span>
+        <a id="rColl" href="#/"></a>
+        <span class="sep sep2" aria-hidden="true">›</span>
+        <span class="now" id="rTitle"></span>
+      </div>
+      <div class="actions">
+        <a class="ext" id="rExt" href="#" target="_blank" rel="noopener" title="Open this capsule on its own in a new tab">↗<span class="long"> Full page</span></a>
+        <button type="button" class="theme" data-theme-btn aria-label="Change colour theme">Theme: Auto</button>
+      </div>
+    </div>
+    <iframe class="frame" id="frame" title="Capsule"></iframe>
   </div>
 
   <!-- Data: generated by update.py from capsules.json -->
@@ -205,24 +267,42 @@
   (function () {
     "use strict";
 
+    var SITE = "The Encyclopedia";
     var STALE_MONTHS = 6;
+    var UNSORTED = "Unsorted";
     var $ = function (id) { return document.getElementById(id); };
-    var grid = $("grid"), statusEl = $("status"), q = $("q"), topicSel = $("topic"), drafts = $("drafts");
+    var library = $("library"), reader = $("reader"), frame = $("frame");
+    var grid = $("grid"), statusEl = $("status"), crumbs = $("crumbs"), viewTitle = $("viewTitle");
+    var q = $("q"), drafts = $("drafts");
+    var ALL = [], BY_SLUG = {};
 
-    /* ---------- theme toggle: Auto -> Light -> Dark ---------- */
-    var themeBtn = $("theme");
+    /* ---------- theme: Auto -> Light -> Dark ---------- */
+    var themeBtns = document.querySelectorAll("[data-theme-btn]");
     function currentTheme() { return document.documentElement.getAttribute("data-theme") || "auto"; }
     function showTheme() {
       var t = currentTheme();
-      themeBtn.textContent = "Theme: " + t.charAt(0).toUpperCase() + t.slice(1);
+      themeBtns.forEach(function (b) { b.textContent = "Theme: " + t.charAt(0).toUpperCase() + t.slice(1); });
     }
-    themeBtn.addEventListener("click", function () {
-      var next = { auto: "light", light: "dark", dark: "auto" }[currentTheme()];
-      if (next === "auto") document.documentElement.removeAttribute("data-theme");
-      else document.documentElement.setAttribute("data-theme", next);
-      try { if (next === "auto") localStorage.removeItem("theme"); else localStorage.setItem("theme", next); } catch (e) {}
-      showTheme();
+    // Pass the theme on to the capsule in the frame (works when served from a website).
+    function themeFrame() {
+      try {
+        var root = frame.contentDocument && frame.contentDocument.documentElement;
+        if (!root) return;
+        var t = currentTheme();
+        if (t === "auto") root.removeAttribute("data-theme"); else root.setAttribute("data-theme", t);
+      } catch (e) { /* opened as a local file: the capsule follows the system setting */ }
+    }
+    themeBtns.forEach(function (b) {
+      b.addEventListener("click", function () {
+        var next = { auto: "light", light: "dark", dark: "auto" }[currentTheme()];
+        if (next === "auto") document.documentElement.removeAttribute("data-theme");
+        else document.documentElement.setAttribute("data-theme", next);
+        try { if (next === "auto") localStorage.removeItem("theme"); else localStorage.setItem("theme", next); } catch (e) {}
+        showTheme();
+        themeFrame();
+      });
     });
+    frame.addEventListener("load", themeFrame);
     showTheme();
 
     /* ---------- helpers ---------- */
@@ -238,18 +318,17 @@
     }
     function isStale(s) {
       var d = parseDate(s);
-      if (!d) return true;  // no valid date counts as "needs checking"
+      if (!d) return true;
       var limit = new Date();
       limit.setHours(0, 0, 0, 0);
       limit.setMonth(limit.getMonth() - STALE_MONTHS);
       return d < limit;
     }
-    function norm(s) {
-      return String(s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
-    }
+    function norm(s) { return String(s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, ""); }
+    function slugify(s) { return norm(s).replace(/&/g, " and ").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "x"; }
     function safeHref(file) {
       var f = String(file || "");
-      if (/^[a-z][a-z0-9+.-]*:/i.test(f) || f.indexOf("//") === 0) return "#";   // only local files
+      if (/^[a-z][a-z0-9+.-]*:/i.test(f) || f.indexOf("//") === 0) return null;   // only local files
       return f.split("/").map(encodeURIComponent).join("/");
     }
     function el(tag, cls, text) {
@@ -258,93 +337,223 @@
       if (text != null) n.textContent = text;
       return n;
     }
+    function plural(n, one, many) { return n + " " + (n === 1 ? one : many); }
+    function collectionOf(c) { return isTodo(c.topic) ? UNSORTED : String(c.topic).trim(); }
+    function titleOf(c) { return isTodo(c.title) ? (c.file || "Untitled") : c.title; }
 
-    /* ---------- render ---------- */
-    function render(items) {
-      // topics
-      var topics = {};
-      items.forEach(function (c) { if (!isTodo(c.topic)) topics[c.topic] = true; });
-      Object.keys(topics).sort(function (a, b) { return a.localeCompare(b); }).forEach(function (t) {
-        topicSel.appendChild(new Option(t, t));
+    /* ---------- data ---------- */
+    function prepare(items) {
+      items.forEach(function (c) {
+        c._coll = collectionOf(c);
+        c._collSlug = slugify(c._coll);
+        c._tags = Array.isArray(c.tags) ? c.tags.filter(function (t) { return !isTodo(t); }) : [];
+        c._text = norm([c.title, c.topic, c._tags.join(" "), c.summary].join(" "));
+        if (!c.slug) c.slug = slugify(c.file || c.title);
+        BY_SLUG[c.slug] = c;
       });
-
       // newest first, then by title
       items.sort(function (a, b) {
         var da = parseDate(a.date_built), db = parseDate(b.date_built);
         if (da && db && da - db !== 0) return db - da;
         if (!!da !== !!db) return da ? -1 : 1;
-        return String(a.title || "").localeCompare(String(b.title || ""));
+        return titleOf(a).localeCompare(titleOf(b));
       });
+      ALL = items;
+    }
+    function visible(list) {
+      return list.filter(function (c) { return drafts.checked || c.status !== "draft"; });
+    }
+    function collections() {
+      var map = {}, order = [];
+      ALL.forEach(function (c) {
+        if (!map[c._collSlug]) { map[c._collSlug] = { name: c._coll, slug: c._collSlug, items: [] }; order.push(map[c._collSlug]); }
+        map[c._collSlug].items.push(c);
+      });
+      order.sort(function (a, b) {
+        if (a.name === UNSORTED) return 1;
+        if (b.name === UNSORTED) return -1;
+        return a.name.localeCompare(b.name);
+      });
+      return order;
+    }
 
-      var cards = items.map(function (c) {
-        var card = el("article", "card");
-        var tags = Array.isArray(c.tags) ? c.tags.filter(function (t) { return !isTodo(t); }) : [];
-
-        if (!isTodo(c.topic)) card.appendChild(el("span", "topic", c.topic));
-
-        var h = el("h2");
-        var a = el("a", null, isTodo(c.title) ? (c.file || "Untitled") : c.title);
-        a.href = safeHref(c.file);
-        h.appendChild(a);
-        card.appendChild(h);
-
-        if (!isTodo(c.summary)) card.appendChild(el("p", "summary", c.summary));
-
-        if (tags.length) {
-          var ul = el("ul", "tags");
-          ul.setAttribute("aria-label", "Tags");
-          tags.forEach(function (t) { ul.appendChild(el("li", null, t)); });
-          card.appendChild(ul);
-        }
-
+    /* ---------- builders ---------- */
+    function capsuleCard(c, showTopic) {
+      var card = el("article", "card");
+      if (showTopic) card.appendChild(el("span", "topic", c._coll));
+      var h = el("h3"), a = el("a", null, titleOf(c));
+      a.href = "#/read/" + encodeURIComponent(c.slug);
+      h.appendChild(a);
+      card.appendChild(h);
+      if (!isTodo(c.summary)) card.appendChild(el("p", "summary", c.summary));
+      if (c._tags.length) {
+        var ul = el("ul", "tags");
+        ul.setAttribute("aria-label", "Tags");
+        c._tags.forEach(function (t) { ul.appendChild(el("li", null, t)); });
+        card.appendChild(ul);
+      }
+      var flags = el("div", "flags");
+      if (c.status === "draft") flags.appendChild(el("span", "flag draft", "Draft"));
+      if (isStale(c.facts_verified_as_of)) {
+        var f = el("span", "flag stale", "⚠ Re-check facts");
+        f.title = parseDate(c.facts_verified_as_of)
+          ? "Facts were last verified more than " + STALE_MONTHS + " months ago."
+          : "No 'verified as of' date set yet.";
+        flags.appendChild(f);
+      }
+      if (c._missing) flags.appendChild(el("span", "flag missing", "File not found"));
+      if (flags.children.length) card.appendChild(flags);
+      var dl = el("dl", "dates");
+      dl.appendChild(el("dt", null, "Built"));
+      dl.appendChild(el("dd", null, fmtDate(c.date_built)));
+      dl.appendChild(el("dt", null, "Facts verified"));
+      dl.appendChild(el("dd", null, fmtDate(c.facts_verified_as_of)));
+      card.appendChild(dl);
+      return card;
+    }
+    function collectionTile(col, items) {
+      var tile = el("article", "coll");
+      tile.appendChild(el("span", "folder", "Collection"));
+      var h = el("h3"), a = el("a", null, col.name);
+      a.href = "#/c/" + encodeURIComponent(col.slug);
+      h.appendChild(a);
+      tile.appendChild(h);
+      var stale = items.filter(function (c) { return isStale(c.facts_verified_as_of); }).length;
+      tile.appendChild(el("p", "count", plural(items.length, "capsule", "capsules")));
+      var ul = el("ul");
+      items.slice(0, 4).forEach(function (c) { ul.appendChild(el("li", null, titleOf(c))); });
+      if (items.length > 4) ul.appendChild(el("li", "more", "+ " + (items.length - 4) + " more"));
+      tile.appendChild(ul);
+      if (stale) {
         var flags = el("div", "flags");
-        if (c.status === "draft") flags.appendChild(el("span", "flag draft", "Draft"));
-        if (isStale(c.facts_verified_as_of)) {
-          var f = el("span", "flag stale", "⚠ Re-check facts");
-          f.title = parseDate(c.facts_verified_as_of)
-            ? "Facts were last verified more than " + STALE_MONTHS + " months ago."
-            : "No 'verified as of' date set yet.";
-          flags.appendChild(f);
-        }
-        if (c._missing) flags.appendChild(el("span", "flag missing", "File not found"));
-        if (flags.children.length) card.appendChild(flags);
+        flags.appendChild(el("span", "flag stale", "⚠ " + stale + " to re-check"));
+        tile.appendChild(flags);
+      }
+      return tile;
+    }
+    function empty(msg) { var e = el("div", "empty"); e.textContent = msg; return e; }
 
-        var dl = el("dl", "dates");
-        dl.appendChild(el("dt", null, "Built"));
-        dl.appendChild(el("dd", null, fmtDate(c.date_built)));
-        dl.appendChild(el("dt", null, "Facts verified"));
-        dl.appendChild(el("dd", null, fmtDate(c.facts_verified_as_of)));
-        card.appendChild(dl);
+    /* ---------- views ---------- */
+    function setStatus(shown, hiddenDrafts, one, many) {
+      var msg = plural(shown, one, many);
+      if (hiddenDrafts) msg += " · " + plural(hiddenDrafts, "draft", "drafts") + " hidden";
+      statusEl.textContent = msg;
+    }
 
-        var haystack = norm([c.title, c.topic, tags.join(" "), c.summary].join(" "));
-        return { node: card, data: c, text: haystack };
-      });
+    function showLibrary(collSlug) {
+      document.body.classList.remove("reading");
+      reader.hidden = true;
+      library.hidden = false;
+      grid.textContent = "";
 
-      function apply() {
-        var words = norm(q.value).split(/\s+/).filter(Boolean);
-        var topic = topicSel.value, showDrafts = drafts.checked;
-        var shown = 0, hiddenDrafts = 0;
-        grid.textContent = "";
-        cards.forEach(function (c) {
-          if (topic && c.data.topic !== topic) return;
-          if (!words.every(function (w) { return c.text.indexOf(w) !== -1; })) return;
-          if (c.data.status === "draft" && !showDrafts) { hiddenDrafts++; return; }
-          grid.appendChild(c.node);
-          shown++;
-        });
-        var msg = shown + (shown === 1 ? " capsule" : " capsules");
-        if (hiddenDrafts) msg += " · " + hiddenDrafts + (hiddenDrafts === 1 ? " draft" : " drafts") + " hidden";
-        statusEl.textContent = msg;
-        if (!shown) {
-          var empty = el("div", "empty");
-          empty.textContent = items.length ? "No capsules match your filters." : "No capsules yet.";
-          grid.appendChild(empty);
-        }
+      var words = norm(q.value).split(/\s+/).filter(Boolean);
+      var col = collSlug ? collections().filter(function (c) { return c.slug === collSlug; })[0] : null;
+
+      if (collSlug && !col) { location.replace("#/"); return; }
+
+      $("qLabel").textContent = col ? "Search this collection" : "Search all capsules";
+      crumbs.hidden = !col;
+      viewTitle.hidden = !col && !words.length;
+      if (col) {
+        crumbs.textContent = "";
+        var home = el("a", null, SITE); home.href = "#/";
+        crumbs.appendChild(home);
+        crumbs.appendChild(document.createTextNode(" › " + col.name));
+        viewTitle.textContent = col.name;
+        document.title = col.name + " · " + SITE;
+      } else {
+        viewTitle.textContent = "Search results";
+        document.title = SITE;
       }
 
-      [q, topicSel].forEach(function (n) { n.addEventListener("input", apply); });
-      drafts.addEventListener("change", apply);
-      apply();
+      // Capsule list: inside a collection, or search results across everything
+      if (col || words.length) {
+        var pool = col ? col.items : ALL;
+        var matched = pool.filter(function (c) {
+          return words.every(function (w) { return c._text.indexOf(w) !== -1; });
+        });
+        var shown = visible(matched);
+        setStatus(shown.length, matched.length - shown.length, "capsule", "capsules");
+        shown.forEach(function (c) { grid.appendChild(capsuleCard(c, !col)); });
+        if (!shown.length) grid.appendChild(empty(words.length ? "No capsules match your search." : "No capsules here yet."));
+        return;
+      }
+
+      // Home: collection tiles
+      var cols = collections(), tiles = 0, hidden = 0;
+      cols.forEach(function (c) {
+        var items = visible(c.items);
+        hidden += c.items.length - items.length;
+        if (!items.length) return;
+        grid.appendChild(collectionTile(c, items));
+        tiles++;
+      });
+      setStatus(tiles, hidden, "collection", "collections");
+      if (!tiles) grid.appendChild(empty(ALL.length ? "Only drafts so far. Tick “Show drafts” to see them." : "No capsules yet."));
+    }
+
+    function showReader(slug) {
+      var c = BY_SLUG[slug];
+      if (!c) { location.replace("#/"); return; }
+      library.hidden = true;
+      reader.hidden = false;
+      document.body.classList.add("reading");
+      document.title = titleOf(c) + " · " + SITE;
+
+      var coll = $("rColl");
+      coll.textContent = c._coll;
+      coll.href = "#/c/" + encodeURIComponent(c._collSlug);
+      $("rTitle").textContent = titleOf(c);
+
+      var href = safeHref(c.file);
+      $("rExt").href = href || "#";
+      var old = reader.querySelector(".missing-msg");
+      if (old) old.remove();
+      if (!href || c._missing) {
+        frame.hidden = true;
+        var m = empty("This capsule’s file was not found.");
+        m.classList.add("missing-msg");
+        reader.appendChild(m);
+        return;
+      }
+      // A fresh frame per capsule, so the browser's Back button needs one press, not two.
+      if (frame.getAttribute("src") !== href) {
+        var f = document.createElement("iframe");
+        f.className = "frame";
+        f.addEventListener("load", themeFrame);
+        f.src = href;
+        frame.replaceWith(f);
+        frame = f;
+      }
+      frame.hidden = false;
+      frame.title = titleOf(c);
+    }
+
+    /* ---------- routing: #/  #/c/<collection>  #/read/<capsule> ---------- */
+    var lastLibraryScroll = 0;
+    function route() {
+      var h = location.hash.replace(/^#\/?/, "");
+      var parts = h.split("/").map(function (p) { try { return decodeURIComponent(p); } catch (e) { return p; } });
+      if (parts[0] === "read" && parts[1]) {
+        if (!library.hidden) lastLibraryScroll = window.scrollY;
+        showReader(parts[1]);
+      } else {
+        var fromReader = !reader.hidden;
+        showLibrary(parts[0] === "c" ? parts[1] : null);
+        window.scrollTo(0, fromReader ? lastLibraryScroll : 0);
+      }
+    }
+
+    function start(items) {
+      prepare(items);
+      q.addEventListener("input", function () { if (reader.hidden) showLibrary(currentColl()); });
+      drafts.addEventListener("change", function () { showLibrary(currentColl()); });
+      window.addEventListener("hashchange", route);
+      route();
+    }
+    function currentColl() {
+      var m = /^#\/c\/([^/]+)/.exec(location.hash);
+      return m ? decodeURIComponent(m[1]) : null;
     }
 
     function showError() {
@@ -357,11 +566,10 @@
     }
 
     if (Array.isArray(window.CAPSULES)) {
-      render(window.CAPSULES.slice());
+      start(window.CAPSULES.slice());
     } else if (location.protocol.indexOf("http") === 0) {
-      // Fallback when served from a web server: read capsules.json directly.
       fetch("capsules.json").then(function (r) { return r.json(); })
-        .then(function (d) { Array.isArray(d) ? render(d) : showError(); })
+        .then(function (d) { Array.isArray(d) ? start(d) : showError(); })
         .catch(showError);
     } else {
       showError();
